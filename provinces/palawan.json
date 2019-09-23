@@ -1,9 +1,8 @@
-{
-    " image1":"http://seektheworld.com/wp-content/uploads/2015/08/1G6A4817.jpg",
-    " image2":"https://www.gettingstamped.com/wp-content/uploads/2016/02/Things-to-do-in-El-Nido-Philippines-Simizu-Island-El-Nido-Tour-A-1-800x508.jpg",
-    " image3":"https://www.elnidoparadise.com/wp-content/uploads/kayangan-lake-coron-busuanga.jpg",
-    "nameOfProvince":"province of Palawan",
-    "groupOfIsland":"Luson",
-    "population":"849,469",
-     "delicacies":"[lato seaweeds,Dangit,Sisig]"
- }
+{"images":["/images/img1.jpg",
+    "/images/img2.jpg",
+    "/images/img3.jpg"],
+"name_of_province":"province of Palawan",
+"group_of_island":"Luson",
+"population":"849,469",
+"delicacies":["lato seaweeds","Dangit","Sisig"],
+"write_up":"During the 333 years of the Spanish colonization, Palawan was called Paragua. In 1818, the big Palawan island and the smaller islands surrounding it were formed into a single province named Calamianes with Taytay as its capital."}

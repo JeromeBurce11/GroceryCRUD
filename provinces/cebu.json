@@ -1,9 +1,10 @@
-{
-   " image1":"http://www.unotours.com/wp-content/uploads/2017/01/magellans-cross.jpg",
-   " image2":"https://m.justgola.com/media/a/00/00/1328_og_1.jpeg",
-   " image3":"https://asset.choosephilippines.com/chooseweb/raw/cp_Simala_1.jpg",
-   "nameOfProvince":"province of Cebu",
+{"shortname":"cebu",
+   "images":["/images/cebu1.jpg",
+   "/images/cebu2.jpg",
+   "/images/cebu3.jpg"],
+   "name_of_province":"province of Cebu",
    "groupOfIsland":"Visayas",
    "population":"2,938,982",
-    "delicacies":"[chicharon,lechon,otap]"
+    "delicacies":["chicharon","lechon","otap"],
+    "write_up":"Cebu is a province in the Philippines consisting of the Cebu Island and many other surrounding islands. Its name’s derivation has many alternative interpretation but according to history, it was derived from the word “Sibu” which means “trade”. During the reign of Rajah Humabon, the island has since become an important trading center where various products are being bartered like agricultural products, precious stones, perfumes, etc. Its harbors has become known vernacularly as “Sinibuayng Hingpit” which means “the place for trading” which later was shortened to sibu or sibo (“to trade”) from which the modern name “Cebu” came from."
 }

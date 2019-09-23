@@ -1,9 +1,10 @@
-{
-    " images":["https://tourism.biliranisland.com/wp-content/uploads/2017/08/Kalanggaman-Island-2-1-1024x576.jpg",
-  "http://intrepidwanderer.com/wp-content/uploads/2013/07/Leyte-Landing-Memorial.jpg",
-    "https://www.wheretogo.com.ph/sites/default/files/articles/san-juanico-bridge-1.jpg"],
+{ "shortname":"leyte",
+  "images":["/images/leyte1.jpg",
+    "/images/leyte2.jpg",
+    "/images/leyte3.jpg"],
     "name_of_province":"province of Leyte",
     "group_of_island":"Visayas",
     "population":"1,724,679 ",
-     "delicacies":["binagol","chocolatemoron","sumanlatik"]
+     "delicacies":["binagol","chocolatemoron","sumanlatik"],
+     "write_up":"Leyte is one of the Philippines' most historic provinces as it has witnessed many significant events that formed the history of the country. Being the site not only of a major rebellion against the Spaniards, Leyte is also the famous landing site of the US forces during World War II led by General Douglas MacArthur."
  }

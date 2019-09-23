@@ -1,14 +1,26 @@
-center
-    h1 Welcome to 
-    h1=name_of_province
-    div 
-         img(src= images[0]) 
-    div 
-        h1 Delicacies
-        ul 
-            li=delicacies[0]
-            li=delicacies[1]
-            li=delicacies[2]
-         
-    h1=groupOfIsland
-    h1=population
+html
+    head
+        style
+            include style.css
+    body
+       center
+            h1 Welcome to 
+            h1=alldata.name_of_province
+            div 
+               img(src=image1 style="width:80%;height:500px;")
+               img.subPic(src=image2)
+               img.subPic(src=image3)
+            div 
+                h1 Delicacies :
+                ul 
+                    h3=alldata.delicacies[0] 
+                    h3=alldata.delicacies[1]
+                    h3=alldata.delicacies[2]
+            label Group of island :
+                span=alldata.groupOfIsland
+            br
+            label Number of Population :
+                span=alldata.population
+            h1=alldata.write_up
+    //- script
+    //-     |console.log(images[0])
