@@ -1,13 +1,19 @@
 html
     head
+     
         style
             include style.css
+           
+    header
+    center
+        
+            h1=alldata.name_of_province
     body
        center
-            h1 Welcome to 
-            h1=alldata.name_of_province
             div 
-               img(src=image1 style="width:80%;height:500px;")
+               img.largeImg(src=image1 )
+               br
+               br
                img.subPic(src=image2)
                img.subPic(src=image3)
             div 
@@ -21,6 +27,16 @@ html
             br
             label Number of Population :
                 span=alldata.population
-            h1=alldata.write_up
+            h2=alldata.write_up
+            h2 average rating of 
+                span=alldata.name_of_province
+                span is
+                span
+            h2 ratings:
+            button#1 1
+            button#2 2
+            button#3 3
+            button#4 4
+            button#5 5
     //- script
     //-     |console.log(images[0])
