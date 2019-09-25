@@ -1,3 +1,7 @@
+body{
+    padding: 20px 2%;
+    font-family: Georgia, 'Times New Roman', Times, serif
+}
 .subPic{
     width:38%;
     height:500px;
@@ -23,12 +27,30 @@ body{
 h1{
     font-size: 50px;
 }
-h1{
-    font-size: 20px;
-}
+
 span{
     font-size: 20px;
 }
-label{
-    font-size: 20px;
+
+
+
+#writeUp{
+    border: solid white 2px;
+    text-align: justify;
+    padding: 25px;
+    text-indent: 2em;
+}
+
+
+button{
+    border: none;
+    margin: 5px;
+    padding: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 24px;
+}
+button:hover{
+    background: greenyellow
 }

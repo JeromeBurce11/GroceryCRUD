@@ -3,40 +3,51 @@ html
      
         style
             include style.css
-           
+        title=shortname
     header
     center
         
-            h1=alldata.name_of_province
+            h1=name_of_province
     body
        center
             div 
-               img.largeImg(src=image1 )
+               img.largeImg(src=images[0] )
                br
                br
-               img.subPic(src=image2)
-               img.subPic(src=image3)
+               img.subPic(src=images[1])
+               img.subPic(src=images[2])
             div 
                 h1 Delicacies :
                 ul 
-                    h3=alldata.delicacies[0] 
-                    h3=alldata.delicacies[1]
-                    h3=alldata.delicacies[2]
-            label Group of island :
-                span=alldata.groupOfIsland
-            br
-            label Number of Population :
-                span=alldata.population
-            h2=alldata.write_up
+                    h3=delicacies[0] 
+                    h3=delicacies[1]
+                    h3=delicacies[2]
+            center
+                ul
+                    li
+                        h2
+                            label Group of island :
+                                span=group_of_island
+                    li
+                        h2
+                                label Number of Population :
+                                    span=population
+                        
+                            
+            h2#writeUp=write_up
             h2 average rating of 
-                span=alldata.name_of_province
-                span is
-                span
-            h2 ratings:
+                span=name_of_province+" "
+                span="is " 
+                span#ratings=rate
+                br
+            h2 Rate :  
+            
             button#1 1
             button#2 2
             button#3 3
             button#4 4
             button#5 5
+    script(src="/jquery.js")
+    script(src="/Ajax.js")
     //- script
     //-     |console.log(images[0])
