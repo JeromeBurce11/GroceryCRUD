@@ -1,9 +1,10 @@
 html
     head
-     
+        title=shortname
+        
         style
             include style.css
-        title=shortname
+       
     header
     center
         
@@ -23,12 +24,11 @@ html
                     h3=delicacies[1]
                     h3=delicacies[2]
             center
-                ul
-                    li
+                div#write
                         h2
                             label Group of island :
                                 span=group_of_island
-                    li
+                    
                         h2
                                 label Number of Population :
                                     span=population
@@ -47,7 +47,7 @@ html
             button#3 3
             button#4 4
             button#5 5
-    script(src="/jquery.js")
-    script(src="/Ajax.js")
+    script(src='/js/jquery.js')
+    script(src='/js/Ajax.js')
     //- script
     //-     |console.log(images[0])
