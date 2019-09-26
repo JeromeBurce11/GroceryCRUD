@@ -23,12 +23,13 @@ app.get("/rate", function (req, res) {
     var newData = readJSON.readJSON(city);
     var rating = (Number(newData.rate) + Number(rate))
     newData.rate = rating
-    newData.rate = Number(Number(newData.rate/2).toFixed(2))
-    updateJSON.updateJSON(city,newData)
-    res.end(""+newData.rate)
+    newData.rate = Number(Number(newData.rate/2).toFixed(2))// the oldData is updated
+    updateJSON.updateJSON(city,newData)//module in updating the datas
+    res.end(""+newData.rate)//convert to
+    console.log(newData.rate)
 })
 app.use(function (req, res, next) {
-    numReq.numRequest(req, res);
+    numReq.numRequest(req, res);//module for NumReq
     next();
 })
 
@@ -36,9 +37,9 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 app.get('/provinces/:name', function (req, res) {
     var provinceName = req.params.name + ".json";
-    console.log(provinceName) //pathname like bohol.json
-    var allData =readJSON.readJSON(provinceName);
-    console.log(allData)
+   // console.log(provinceName) //determing the file like bohol.json
+    var allData =readJSON.readJSON(provinceName);//module for reading all the data
+   // console.log(allData)
     res.render('index', allData)
 })
 

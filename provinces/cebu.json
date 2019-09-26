@@ -1,11 +1,1 @@
-{"shortname":"cebu",
-   "images":["/images/cebu1.jpg",
-   "/images/cebu2.jpg",
-   "/images/cebu3.jpg"],
-   "name_of_province":"Province of Cebu",
-   "groupOfIsland":"Visayas",
-   "population":"2,938,982",
-    "delicacies":["chicharon","lechon","otap"],
-    "rate":"0",
-    "write_up":"Cebu is a province in the Philippines consisting of the Cebu Island and many other surrounding islands. Its name’s derivation has many alternative interpretation but according to history, it was derived from the word “Sibu” which means “trade”. During the reign of Rajah Humabon, the island has since become an important trading center where various products are being bartered like agricultural products, precious stones, perfumes, etc. Its harbors has become known vernacularly as “Sinibuayng Hingpit” which means “the place for trading” which later was shortened to sibu or sibo (“to trade”) from which the modern name “Cebu” came from."
-}
+{"shortname":"cebu","images":["/images/cebu1.jpg","/images/cebu2.jpg","/images/cebu3.jpg"],"name_of_province":"Province of Cebu","groupOfIsland":"Visayas","population":"2,938,982","delicacies":["chicharon","lechon","otap"],"rate":1,"write_up":"Cebu is a province in the Philippines consisting of the Cebu Island and many other surrounding islands. Its name’s derivation has many alternative interpretation but according to history, it was derived from the word “Sibu” which means “trade”. During the reign of Rajah Humabon, the island has since become an important trading center where various products are being bartered like agricultural products, precious stones, perfumes, etc. Its harbors has become known vernacularly as “Sinibuayng Hingpit” which means “the place for trading” which later was shortened to sibu or sibo (“to trade”) from which the modern name “Cebu” came from."}

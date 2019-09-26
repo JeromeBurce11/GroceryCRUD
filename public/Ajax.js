@@ -7,9 +7,6 @@ $(document).ready(function () {
             success: function (data) {
                 $('#ratings').text(data)
             },
-            error: function (e) {
-
-            }
         })
     });
 

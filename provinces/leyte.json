@@ -1,11 +1,1 @@
-{ "shortname":"leyte",
-  "images":["/images/leyte1.jpg",
-    "/images/leyte2.jpg",
-    "/images/leyte3.jpg"],
-    "name_of_province":"Province of Leyte",
-    "group_of_island":"Visayas",
-    "population":"1,724,679 ",
-     "delicacies":["binagol","chocolatemoron","sumanlatik"],
-     "rate":"0",
-     "write_up":"Leyte is one of the Philippines' most historic provinces as it has witnessed many significant events that formed the history of the country. Being the site not only of a major rebellion against the Spaniards, Leyte is also the famous landing site of the US forces during World War II led by General Douglas MacArthur."
- }
+{"shortname":"leyte","images":["/images/leyte1.jpg","/images/leyte2.jpg","/images/leyte3.jpg"],"name_of_province":"Province of Leyte","group_of_island":"Visayas","population":"1,724,679 ","delicacies":["binagol","chocolatemoron","sumanlatik"],"rate":1.56,"write_up":"Leyte is one of the Philippines' most historic provinces as it has witnessed many significant events that formed the history of the country. Being the site not only of a major rebellion against the Spaniards, Leyte is also the famous landing site of the US forces during World War II led by General Douglas MacArthur."}

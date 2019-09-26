@@ -1,0 +1,1 @@
+/provinces/palawan,/images/img1.jpg,/images/img2.jpg,/jquery.js,/Ajax.js,/images/img3.jpg,/provinces/palawan,/images/img1.jpg,/images/img2.jpg,/jquery.js,/images/img3.jpg,/Ajax.js,/provinces/cebu,/images/cebu1.jpg,/images/cebu2.jpg,/jquery.js,/Ajax.js,/images/cebu3.jpg,/provinces/cebu,/images/cebu1.jpg,/images/cebu2.jpg,/jquery.js,/Ajax.js,/images/cebu3.jpg,
