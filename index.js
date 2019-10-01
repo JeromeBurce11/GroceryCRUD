@@ -1,51 +1,67 @@
-var express = require('express')
-var app = express()
-var fs = require('fs')
-var numReq = require('./NumReq')
-app.set('view engine', 'pug');
-app.set('views', 'view');
-var path = require('path');
-var readJSON = require('./readJSON');
-var updateJSON = require('./updateJSON');
+var app = require('express')();
+var express = require('express');
+var http = require("http").Server(app)
+var port = process.env.PORT || 1234;
+var mongoose = require('mongoose');
 
-// respond the index.pug when a GET request is made to the homepage
+mongoose.connect('mongodb://localhost/shop', { useNewUrlParser: true, useUnifiedTopology: true });
 
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
+    // we're connected!
+    console.log("Yehey")
+});
 
+var shoppingSchema = new mongoose.Schema({
+    item: {
+        type: String
+    },
+
+    quantity: {
+        type: Number,
+    },
+
+    priority: {
+        type: String
+    }
+
+});
+
+var Shop = mongoose.model('Shop', shoppingSchema, 'item');
+
+var item1 = new Shop({ item: 'Coke', quantity: 5, priority: 1 })
+    item1.save(function (err, shop) {
+        if (err) return console.error(err);
+        console.log(shop.item + " saved to bookstore collection.");
+    });
 
 app.get('/', function (req, res) {
-    res.render('index');
+    res.sendFile(__dirname+"/index.html")
 })
 
-app.get("/rate", function (req, res) {
-    var rate = req.query.rate;
-    console.log(rate)
-    var city = req.query.city+".json";
-    console.log(city)
-    var newData = readJSON.readJSON(city);
-    var rating = (Number(newData.rate) + Number(rate))
-    newData.rate = rating
-    newData.rate = Number(Number(newData.rate/2).toFixed(2))// the oldData is updated
-    updateJSON.updateJSON(city,newData)//module in updating the datas
-    res.end(""+newData.rate)//convert to
-    console.log(newData.rate)
-    numReq.numRequest(req, res);
-})
+app.put('/item/create', function (req, res) {
 
-app.get('/provinces/:name', function (req, res) {
-    var provinceName = req.params.name + ".json";
-   // console.log(provinceName) //determing the file like bohol.json
-    var allData =readJSON.readJSON(provinceName);//module for reading all the data
-   // console.log(allData)
-    res.render('index', allData)
-    numReq.numRequest(req, res);//module for NumReq
-})
-app.all("*", function (req, res, next) {
     
-    numReq.numRequest(req, res);//module for NumReq
-    next();
+    
 })
 
+app.get('/item/retrieve/all', function (req, res) {
+    res.send('Retrieve all files here')
+})
 
-app.use(express.static(path.join(__dirname, '/public/')));
+app.get('/item/retrieve/:id', function (req, res) {
+    res.send("Result: " + req.params.id)
+})
 
-app.listen(8000);
+app.post('/item/update/', function (req, res) {
+    res.send("File updated!")
+})
+
+app.delete('/item/delete', function (req, res) {
+    res.send('Item delete!')
+})
+
+http.listen(port, function () {
+    console.log('listening on *:' + port);
+});
