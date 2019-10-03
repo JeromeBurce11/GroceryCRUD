@@ -14,15 +14,23 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 app.put('/item/create', function (req, res) {
-        // console.log(req.body)
         let test =  new Item(req.body)
-        // console.log(test)
-        test.save(function(err){
+       
+        test.save(function(err,data){
             if(err){
                 console.log('err')
             }else{
                 console.log('saved')
             }
+            Item.find(req.body ,function(err,item){
+                if(err){
+                    console.log('err')
+                }else{
+                   console.log(item);
+                   res.json(item)
+                }
+    
+            })
 
         })
 })
@@ -33,10 +41,17 @@ app.get('/', function (req, res) {
 
 
 
-app.get('/item/retrieve/', function (req, res) {
+app.get('/item/retrieve/all', function (req, res) {
     
-        // let test =  new Item(req.body)
-        Item.find({},function(err,item){
+    let test =  new Item(req.body)
+       
+    test.save(function(err,data){
+        if(err){
+            console.log('err')
+        }else{
+            console.log('saved')
+        }
+        Item.find(req.body ,function(err,item){
             if(err){
                 console.log('err')
             }else{
@@ -45,6 +60,8 @@ app.get('/item/retrieve/', function (req, res) {
             }
 
         })
+
+    })
 })
 
 

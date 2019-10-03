@@ -5,8 +5,32 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="script.js"></script>
 <script>
+
     $(document).ready(function () {
+        $("#formni").hide();
+        $("#createbtn").click(function () {
+            $("#formni").show();
+            $("#tableni").hide();
+        })
+        $("#addItems").click(function () {
+            $("#formni").hide();
+            $("#tableni").show();
+        })
+        $('#addItems').prop('disabled', 'disabled');
+
+        $('input').on("keyup", function () {
+            // e.preventDefault();
+            if ($('#item').val() <= 0 || $('#Quantity').val() <= 0 || $('#Priority').val() <= 0) {
+                $('#addItems').prop('disabled', 'disabled');
+            } else {
+                $('#addItems').prop('disabled', false);
+            }
+        })
+        $('input').val(" ");
+        
+
         $("#addItems").on('click', function () {
             $.ajax({
                 url: 'item/create',
@@ -14,6 +38,11 @@
                 data: { item: $('#item').val(), Quantity: $('#Quantity').val(), Priority: $('#Priority').val() },
                 success: function (result) {
                     alert("success?");
+                    var item = result
+                    for (var i = 0; i < result.length; ++i) {
+                        console.log(result[i].item)
+                        $('tbody').append("<tr><td>" + result[i].item + "</td><td>" + result[i].Quantity + "</td><td>" + result[i].Priority + "</td></tr>"+"<br>")
+                    }
                     console.log(result);
                 },
                 error: function (e) {
@@ -23,13 +52,13 @@
         })
 
         $.ajax({
-            url: '/item/retrieve',
+            url: '/item/retrieve/all',
             type: 'get',
-            success:function(result){
+            success: function (result) {
                 var item = result
-                for(var i=0;i<result.length;++i){
+                for (var i = 0; i < result.length; ++i) {
                     console.log(result[i].item)
-                    $('tbody').append("<tr><td>"+result[i].item+"</td><td>"+result[i].Quantity+ "</td><td>"+result[i].item+"</td></tr><br>")
+                    $('tbody').append("<tr><td>" + result[i].item + "</td><td>" + result[i].Quantity + "</td><td>" + result[i].Priority + "</td></tr><br>")
                 }
             }
         })
@@ -38,44 +67,50 @@
 
 <body>
     <center>
-        <h1>GroceryList</h1>
-        <div class="container">
-            <button type="button">Create</button>
-        </div>
+        <div id="tableni">
+            <h1>GroceryList</h1>
+            <div class="container">
+                <button class="btn btn-info" id="createbtn" type="button">Create</button><br>
+            </div>
 
-        </form>
-        <div class="container">
-            <table class="table table-dark">
-                <thead>
-                    <tr>
-                        <center>
-                            <th>Item</th>
-                            <th>Quantity</th>
-                            <th>Priority</th>
-                        </center>
-                    </tr>
-                </thead>
-                <tbody>
-                  
+            </form>
+            <div class="container">
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <center>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Priority</th>
+                                <th>Action</th>
+                            </center>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                </tbody>
-            </table>
+
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div>
+        <div id="formni">
             <form class="form">
                 <fieldset>
                     <center>
+                            <h1>Add Item</h1>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-shopping-cart"></i></span>
                             <input id="item" type="text" class="form-control" name="item" placeholder="Item">
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-plus-sign"></i></span>
-                            <input id="Quantity" type="number" class="form-control" name="Quantity" placeholder="Quantity">
+                            <input id="Quantity" type="number" class="form-control" name="Quantity"
+                                placeholder="Quantity">
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-plus"></i></span>
-                            <input id="Priority" type="number" class="form-control" name="Priority" placeholder="Priority">
+                            <input id="Priority" type="number" class="form-control" name="Priority"
+                                placeholder="Priority">
                         </div>
                         <br>
                     </center>
