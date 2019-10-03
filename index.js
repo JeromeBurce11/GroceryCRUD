@@ -1,58 +1,52 @@
 var app = require('express')();
 var express = require('express');
 var http = require("http").Server(app)
-var port = process.env.PORT || 1234;
+var port = process.env.PORT || 8000;
 var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+var Item = require('./item')
 
-mongoose.connect('mongodb://localhost/shop', { useNewUrlParser: true, useUnifiedTopology: true });
+var url = "mongodb://localhost:27017/shop";
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
-    // we're connected!
-    console.log("Yehey")
-});
+app.use(bodyParser.urlencoded({ extended: true }))
 
-var shoppingSchema = new mongoose.Schema({
-    item: {
-        type: String
-    },
-
-    quantity: {
-        type: Number,
-    },
-
-    priority: {
-        type: String
-    }
-
-});
-
-var Shop = mongoose.model('Shop', shoppingSchema, 'item');
-
-var item1 = new Shop({ item: 'Coke', quantity: 5, priority: 1 })
-    item1.save(function (err, shop) {
-        if (err) return console.error(err);
-        console.log(shop.item + " saved to bookstore collection.");
-    });
-
-app.get('/', function (req, res) {
-    res.sendFile(__dirname+"/index.html")
-})
+app.use(bodyParser.json())
 
 app.put('/item/create', function (req, res) {
+        // console.log(req.body)
+        let test =  new Item(req.body)
+        // console.log(test)
+        test.save(function(err){
+            if(err){
+                console.log('err')
+            }else{
+                console.log('saved')
+            }
 
+        })
+})
+
+app.get('/', function (req, res) {
+    res.sendFile(__dirname + "/view/index.html");
+})
+
+
+
+app.get('/item/retrieve/', function (req, res) {
     
-    
+        // let test =  new Item(req.body)
+        Item.find({},function(err,item){
+            if(err){
+                console.log('err')
+            }else{
+               console.log(item);
+               res.json(item)
+            }
+
+        })
 })
 
-app.get('/item/retrieve/all', function (req, res) {
-    res.send('Retrieve all files here')
-})
-
-app.get('/item/retrieve/:id', function (req, res) {
-    res.send("Result: " + req.params.id)
-})
 
 app.post('/item/update/', function (req, res) {
     res.send("File updated!")

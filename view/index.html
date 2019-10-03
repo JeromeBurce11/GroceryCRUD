@@ -1,40 +1,91 @@
 <!DOCTYPE html>
 <html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<!-- <script type="text/javascript" src="Controller.js"></script> -->
-<!-- <link rel="stylesheet" type="text/css" href="Style.css"> -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script>
+    $(document).ready(function () {
+        $("#addItems").on('click', function () {
+            $.ajax({
+                url: 'item/create',
+                type: "PUT",
+                data: { item: $('#item').val(), Quantity: $('#Quantity').val(), Priority: $('#Priority').val() },
+                success: function (result) {
+                    alert("success?");
+                    console.log(result);
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            })
+        })
+
+        $.ajax({
+            url: '/item/retrieve',
+            type: 'get',
+            success:function(result){
+                var item = result
+                for(var i=0;i<result.length;++i){
+                    console.log(result[i].item)
+                    $('tbody').append("<tr><td>"+result[i].item+"</td><td>"+result[i].Quantity+ "</td><td>"+result[i].item+"</td></tr><br>")
+                }
+            }
+        })
+    })
+</script>
 
 <body>
-    <h1>GroceryList</h1>
-    <div class="container">
-        <button type="button">Add</button>
-    </div>
+    <center>
+        <h1>GroceryList</h1>
+        <div class="container">
+            <button type="button">Create</button>
+        </div>
 
+        </form>
+        <div class="container">
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <center>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Priority</th>
+                        </center>
+                    </tr>
+                </thead>
+                <tbody>
+                  
 
-
-    </form>
-    <div class="container">
-        <table class="table table-dark">
-            <thead>
-                <tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <form class="form">
+                <fieldset>
                     <center>
-                        <th>Item</th>
-                        <th>Quantity</th>
-                        <th>Priority</th>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-shopping-cart"></i></span>
+                            <input id="item" type="text" class="form-control" name="item" placeholder="Item">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-plus-sign"></i></span>
+                            <input id="Quantity" type="number" class="form-control" name="Quantity" placeholder="Quantity">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-plus"></i></span>
+                            <input id="Priority" type="number" class="form-control" name="Priority" placeholder="Priority">
+                        </div>
+                        <br>
                     </center>
-                </tr>
-            </thead>
-            <tbody>
+                </fieldset>
+                <button type="button" id="addItems" class="btn btn-info">Add Items</button>
 
-            </tbody>
-        </table>
-        <!-- <div id="wait"><img src='https://cssauthor.com/wp-content/uploads/2018/06/Silver-Balls-Swinging.gif' width="400" -->
-                height="400" /><br>Loading..</div>
-    </div>
+            </form>
 
-
+        </div>
+    </center>
 
 </body>
 
