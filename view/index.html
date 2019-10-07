@@ -9,7 +9,9 @@
 <script>
 
     $(document).ready(function () {
+        var id;
         $("#formni").hide();
+        $("#formUpdate").hide();
         $("#createbtn").click(function () {
             $("#formni").show();
             $("#tableni").hide();
@@ -29,7 +31,21 @@
             }
         })
         $('input').val(" ");
-        
+
+        $(document).on('click', '#updateBtn', function (e) {
+            e.preventDefault(e);
+            $("#formUpdate").show();
+            id = $(this).attr("DataId");
+            retrieveOneItem($(this).attr("DataId"))
+
+        })
+
+        $(document).on('click', '#updateItems', function (e) {
+            e.preventDefault(e);
+            $("#formUpdate").hide();
+            //alert('done update !!')
+        })
+
 
         $("#addItems").on('click', function () {
             $.ajax({
@@ -41,7 +57,7 @@
                     var item = result
                     for (var i = 0; i < result.length; ++i) {
                         console.log(result[i].item)
-                        $('tbody').append("<tr><td>" + result[i].item + "</td><td>" + result[i].Quantity + "</td><td>" + result[i].Priority + "</td></tr>"+"<br>")
+                        $('tbody').append("<tr id="+result[i]._id+"  ><td>" + result[i].item + "</td><td>" + result[i].Quantity + "</td><td>" + result[i].Priority + "</td><td><button class='btn btn-info' DataId=" + result[i]._id + ">Update</button><button class='btn btn-success ' id='deleteBtn'>Delete</button></td></tr>" + "<br>")
                     }
                     console.log(result);
                 },
@@ -58,10 +74,67 @@
                 var item = result
                 for (var i = 0; i < result.length; ++i) {
                     console.log(result[i].item)
-                    $('tbody').append("<tr><td>" + result[i].item + "</td><td>" + result[i].Quantity + "</td><td>" + result[i].Priority + "</td></tr><br>")
+                    $('tbody').append("<tr id="+result[i]._id+"><td>" + result[i].item + "</td><td>" + result[i].Quantity + "</td><td>" + result[i].Priority + "</td><td><button class='btn btn-info ' id='updateBtn'  DataId=" + result[i]._id + " >Update</button><button class='btn btn-success ' id='deleteBtn'>Delete</button></td></tr><br>")
                 }
             }
         })
+
+
+        //retrieve specific item
+        function retrieveOneItem(DataId) {
+            $.ajax({
+                url: '/item/retrieve/' + DataId + '',
+                type: 'get',
+                success: function (result) {
+                    console.log(result)
+                    $('#updateitem').val(result.item)
+                    $('#updateQuantity').val(result.Quantity)
+                    $('#updatePriority').val(result.Priority)
+
+                },
+                error: function (e) {
+                    console.error(e)
+                }
+            })
+        }
+
+        $("#updateItems").click(function () {
+            location.reload();
+            var newId = id;
+            $.ajax({
+                url: '/item/update/' + newId + '',
+                type: "PUT",
+                data: { id: newId, item: $('#updateitem').val(), Quantity: $('#updateQuantity').val(), Priority: $('#updatePriority').val() },
+                success: function (result) {
+                    location.reload();
+                },
+                error: function (e) {
+                    console.error(e)
+                }
+
+            })
+        })
+        $(document).on('click', "#deleteBtn", (function () {
+            var id = $(this).closest("tr").attr("id")
+            $.ajax({
+                url: '/item/delete',
+                type: 'Delete',
+                dataType: 'JSON',
+                data: { id: id },
+                error: function (err) {
+                    alert(err)
+                },
+                success: function (result) {
+                    console.log(result)
+                    $('#' + id).remove();
+                    alert(result.message)
+                }
+            })
+        }))
+
+
+
+
     })
 </script>
 
@@ -97,30 +170,51 @@
             <form class="form">
                 <fieldset>
                     <center>
-                            <h1>Add Item</h1>
+                        <h1>Add Item</h1>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-shopping-cart"></i></span>
                             <input id="item" type="text" class="form-control" name="item" placeholder="Item">
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-plus-sign"></i></span>
-                            <input id="Quantity" type="number" class="form-control" name="Quantity"
-                                placeholder="Quantity">
+                            <input id="Quantity" type="number" class="form-control" name="Quantity" placeholder="Quantity">
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-plus"></i></span>
-                            <input id="Priority" type="number" class="form-control" name="Priority"
-                                placeholder="Priority">
+                            <input id="Priority" type="number" class="form-control" name="Priority" placeholder="Priority">
                         </div>
                         <br>
                     </center>
                 </fieldset>
                 <button type="button" id="addItems" class="btn btn-info">Add Items</button>
-
             </form>
+        </div>
 
+        <div id="formUpdate">
+            <form class="form">
+                <fieldset>
+                    <center>
+                        <h1>Update Item</h1>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-shopping-cart"></i></span>
+                            <input id="updateitem" type="text" class="form-control" name="item" placeholder="Item">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-plus-sign"></i></span>
+                            <input id="updateQuantity" type="number" class="form-control" name="Quantity" placeholder="Quantity">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-plus"></i></span>
+                            <input id="updatePriority" type="number" class="form-control" name="Priority" placeholder="Priority">
+                        </div>
+                        <br>
+                    </center>
+                </fieldset>
+                <button type="button" id="updateItems" class="btn btn-info">Update Items</button>
+            </form>
         </div>
     </center>
+
 
 </body>
 
