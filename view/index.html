@@ -1,14 +1,36 @@
 <!DOCTYPE html>
 <html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
+<!-- <link rel="stylesheet" href="view/style.css"> -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<script src="script.js"></script>
+<style>
+    fieldset {
+        width: 30%;
+    }
+</style>
 <script>
 
     $(document).ready(function () {
+
+
+
+        function retrieveAll() {
+            $.ajax({
+                url: '/item/retrieve/all',
+                type: 'get',
+                success: function (result) {
+                    var item = result
+                    for (var i = 0; i < result.length; ++i) {
+                        // console.log(result[i].item)
+                        $('tbody').append("<tr id=" + result[i]._id + "><td>" + result[i].item + "</td><td>" + result[i].Quantity + "</td><td>" + result[i].Priority + "</td><td><button class='btn btn-info ' id='updateBtn'  DataId=" + result[i]._id + " >Update</button><button class='btn btn-success ' id='deleteBtn'>Delete</button></td></tr><br>")
+                    }
+                }
+            })
+        }
+
+        retrieveAll();
         var id;
         $("#formni").hide();
         $("#formUpdate").hide();
@@ -20,10 +42,34 @@
             $("#formni").hide();
             $("#tableni").show();
         })
+        $("#cancelbtn").click(function () {
+            $("#formni").hide();
+            $("#tableni").show();
+        })
+        $("#updateItems").click(function () {
+            $("#tableni").hide();
+            $("#formUpdate").show();
+        })
         $('#addItems').prop('disabled', 'disabled');
+        $('#Quantity').prop('disabled', 'disabled');
+        $('#Priority').prop('disabled', 'disabled');
 
         $('input').on("keyup", function () {
             // e.preventDefault();
+            if ($('#item').val() <= 0) {
+                $('#Quantity').prop('disabled', 'disabled');
+                $('#Priority').prop('disabled', 'disabled');
+            } else {
+                $('#Quantity').prop('disabled', false);
+            }
+
+            if ($('#Quantity').val() <= 0) {
+                $('#Priority').prop('disabled', 'disabled');
+            } else {
+                $('#Priority').prop('disabled', false);
+            }
+
+
             if ($('#item').val() <= 0 || $('#Quantity').val() <= 0 || $('#Priority').val() <= 0) {
                 $('#addItems').prop('disabled', 'disabled');
             } else {
@@ -34,6 +80,7 @@
 
         $(document).on('click', '#updateBtn', function (e) {
             e.preventDefault(e);
+            $("#tableni").hide();
             $("#formUpdate").show();
             id = $(this).attr("DataId");
             retrieveOneItem($(this).attr("DataId"))
@@ -43,7 +90,7 @@
         $(document).on('click', '#updateItems', function (e) {
             e.preventDefault(e);
             $("#formUpdate").hide();
-            //alert('done update !!')
+
         })
 
 
@@ -57,7 +104,7 @@
                     var item = result
                     for (var i = 0; i < result.length; ++i) {
                         console.log(result[i].item)
-                        $('tbody').append("<tr id="+result[i]._id+"  ><td>" + result[i].item + "</td><td>" + result[i].Quantity + "</td><td>" + result[i].Priority + "</td><td><button class='btn btn-info' DataId=" + result[i]._id + ">Update</button><button class='btn btn-success ' id='deleteBtn'>Delete</button></td></tr>" + "<br>")
+                        $('tbody').append("<tr id=" + result[i]._id + "  ><td>" + result[i].item + "</td><td>" + result[i].Quantity + "</td><td>" + result[i].Priority + "</td><td><button class='btn btn-info' DataId=" + result[i]._id + ">Update</button><button class='btn btn-success ' id='deleteBtn'>Delete</button></td></tr>" + "<br>")
                     }
                     console.log(result);
                 },
@@ -67,17 +114,6 @@
             })
         })
 
-        $.ajax({
-            url: '/item/retrieve/all',
-            type: 'get',
-            success: function (result) {
-                var item = result
-                for (var i = 0; i < result.length; ++i) {
-                    console.log(result[i].item)
-                    $('tbody').append("<tr id="+result[i]._id+"><td>" + result[i].item + "</td><td>" + result[i].Quantity + "</td><td>" + result[i].Priority + "</td><td><button class='btn btn-info ' id='updateBtn'  DataId=" + result[i]._id + " >Update</button><button class='btn btn-success ' id='deleteBtn'>Delete</button></td></tr><br>")
-                }
-            }
-        })
 
 
         //retrieve specific item
@@ -99,20 +135,25 @@
         }
 
         $("#updateItems").click(function () {
-            location.reload();
             var newId = id;
             $.ajax({
                 url: '/item/update/' + newId + '',
                 type: "PUT",
                 data: { id: newId, item: $('#updateitem').val(), Quantity: $('#updateQuantity').val(), Priority: $('#updatePriority').val() },
                 success: function (result) {
-                    location.reload();
+                   console.log(result);
+
+                    for (var i = 0; i < result.length; ++i) {
+                  //  console.log(result[i].item)
+                     $('tbody').append("<tr id=" + result[i]._id + "><td>" + result[i].item + "</td><td>" + result[i].Quantity + "</td><td>" + result[i].Priority + "</td><td><button class='btn btn-info ' id='updateBtn'  DataId=" + result[i]._id + " >Update</button><button class='btn btn-success ' id='deleteBtn'>Delete</button></td></tr><br>")
+                    }
                 },
                 error: function (e) {
                     console.error(e)
                 }
 
             })
+            retrieveAll();
         })
         $(document).on('click', "#deleteBtn", (function () {
             var id = $(this).closest("tr").attr("id")
@@ -165,28 +206,35 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        </div><br><br><br>
         <div id="formni">
             <form class="form">
-                <fieldset>
-                    <center>
+                <center>
+                    <fieldset>
+
                         <h1>Add Item</h1>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-shopping-cart"></i></span>
-                            <input id="item" type="text" class="form-control" name="item" placeholder="Item">
+                            <input id="item" type="text" class="form-control" name="item"
+                                placeholder="Enter Name of Item" required>
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-plus-sign"></i></span>
-                            <input id="Quantity" type="number" class="form-control" name="Quantity" placeholder="Quantity">
+                            <input id="Quantity" type="number" class="form-control" name="Quantity"
+                                placeholder="Quantity" required>
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-plus"></i></span>
-                            <input id="Priority" type="number" class="form-control" name="Priority" placeholder="Priority">
+                            <input id="Priority" type="number" class="form-control" name="Priority"
+                                placeholder="Priority" required>
                         </div>
                         <br>
-                    </center>
-                </fieldset>
+
+                    </fieldset>
+                </center>
                 <button type="button" id="addItems" class="btn btn-info">Add Items</button>
+                <button type="button" id="cancelbtn" class="btn btn-danger">Cancel</button>
+
             </form>
         </div>
 
@@ -201,11 +249,13 @@
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-plus-sign"></i></span>
-                            <input id="updateQuantity" type="number" class="form-control" name="Quantity" placeholder="Quantity">
+                            <input id="updateQuantity" type="number" class="form-control" name="Quantity"
+                                placeholder="Quantity">
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-plus"></i></span>
-                            <input id="updatePriority" type="number" class="form-control" name="Priority" placeholder="Priority">
+                            <input id="updatePriority" type="number" class="form-control" name="Priority"
+                                placeholder="Priority">
                         </div>
                         <br>
                     </center>

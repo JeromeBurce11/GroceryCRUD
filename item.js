@@ -18,5 +18,4 @@ var Item = new Schema({
     }
 })
 Item.plugin(uniqueValidator, { message: 'Error, expected ${item} to be unique.' });
-
 module.exports = mongoose.model('Item', Item);

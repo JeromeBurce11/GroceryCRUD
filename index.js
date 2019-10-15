@@ -1,7 +1,7 @@
 var app = require('express')();
 var express = require('express');
 var http = require("http").Server(app)
-var port = process.env.PORT || 8000;
+var port = process.env.PORT || 8001;
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var Item = require('./item')
@@ -77,7 +77,8 @@ app.get('/item/retrieve/:id', function (req, res) {
 
 app.put('/item/update/:id', function (req, res) {
     Item.findOneAndUpdate({_id: req.body.id}, {item: req.body.item, Quantity: req.body.Quantity, Priority: req.body.Priority }, {
-        new: true
+        new: true,
+        upsert:true
       })
 
     .then(items => {
@@ -87,7 +88,7 @@ app.put('/item/update/:id', function (req, res) {
             });            
         }
         res.json(items);
-        console.log(items)
+       // console.log(items)
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
