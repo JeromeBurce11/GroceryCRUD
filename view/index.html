@@ -5,278 +5,125 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="script.js"></script>
 <style>
     fieldset {
         width: 30%;
     }
+    body{
+        background: url(backGr.jpeg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+    }
 </style>
-<script>
-    $(document).ready(function () {
-
-        var listOfItems = [];
-
-        function retrieveAll() {
-            console.log("testing")
-            $.ajax({
-                url: '/item/retrieve/all',
-                type: 'get',
-                success: function (result) {
-                    var item = result
-                    for (var i = 0; i < item.length; ++i) {
-                        // if (!listOfItems.includes(item[i].item)) {
-                            $('tbody').append("<tr id=" + item[i]._id + "><td id="+item[i]._id+'o'+">" + item[i].item + "</td><td id="+item[i]._id+'a'+">" + item[i].Quantity + "</td><td id="+item[i]._id+'s'+">" + item[i].Priority + "</td><td><button class='btn btn-info ' id='updateBtn'  DataId=" + result[i]._id + " >Update</button><button class='btn btn-success ' id='deleteBtn'>Delete</button></td></tr><br>");
-                        //     listOfItems.push(item[i].item);
-                        // }
-                    }
-                }
-            })
-        }
-
-        retrieveAll();
-        var id;
-        $("#formni").hide();
-        $("#formUpdate").hide();
-        $("#createbtn").click(function () {
-            $("#formni").show();
-            $("#tableni").hide();
-        })
-        $("#addItems").click(function () {
-            $("#formni").hide();
-            $("#tableni").show();
-        })
-        $("#cancelbtn").click(function () {
-            $("#formni").hide();
-            $("#tableni").show();
-        })
-        $("#updateItems").click(function () {
-            $("#tableni").hide();
-            $("#formUpdate").show();
-        })
-        $('#addItems').prop('disabled', 'disabled');
-        $('#Quantity').prop('disabled', 'disabled');
-        $('#Priority').prop('disabled', 'disabled');
-
-        $('input').on("keyup", function () {
-            // e.preventDefault();
-            if ($('#item').val() <= 0) {
-                $('#Quantity').prop('disabled', 'disabled');
-                $('#Priority').prop('disabled', 'disabled');
-            } else {
-                $('#Quantity').prop('disabled', false);
-            }
-
-            if ($('#Quantity').val() <= 0) {
-                $('#Priority').prop('disabled', 'disabled');
-            } else {
-                $('#Priority').prop('disabled', false);
-            }
-
-
-            if ($('#item').val() <= 0 || $('#Quantity').val() <= 0 || $('#Priority').val() <= 0) {
-                $('#addItems').prop('disabled', 'disabled');
-            } else {
-                $('#addItems').prop('disabled', false);
-            }
-        })
-        $('input').val(" ");
-
-        $(document).on('click', '#updateBtn', function (e) {
-            e.preventDefault(e);
-            $("#tableni").hide();
-            $("#formUpdate").show();
-            id = $(this).attr("DataId");
-            retrieveOneItem($(this).attr("DataId"))
-
-        })
-
-        $(document).on('click', '#updateItems', function (e) {
-            e.preventDefault(e);
-            $("#formUpdate").hide();
-
-        })
-
-
-        $("#addItems").on('click', function () {
-            $.ajax({
-                url: 'item/create',
-                type: "PUT",
-                data: { item: $('#item').val(), Quantity: $('#Quantity').val(), Priority: $('#Priority').val() },
-                success: function (result) {
-                    alert("success?");
-                    var item = result
-                    for (var i = 0; i < result.length; ++i) {
-                        $('tbody').append("<tr id=" + result[i]._id + "  ><td>" + result[i].item + "</td><td>" + result[i].Quantity + "</td><td>" + result[i].Priority + "</td><td><button class='btn btn-info' DataId=" + result[i]._id + ">Update</button><button class='btn btn-success ' id='deleteBtn'>Delete</button></td></tr>" + "<br>")
-                    }
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            })
-        })
-
-
-
-        //retrieve specific item
-        function retrieveOneItem(DataId) {
-            $.ajax({
-                url: '/item/retrieve/' + DataId + '',
-                type: 'get',
-                success: function (result) {
-                    console.log(result)
-                    $('#updateitem').val(result.item)
-                    $('#updateQuantity').val(result.Quantity)
-                    $('#updatePriority').val(result.Priority)
-
-                },
-                error: function (e) {
-                    console.error(e)
-                }
-            })
-        }
-
-        $("#updateItems").click(function () {
-            var newId = id;
-            $.ajax({
-                url: '/item/update/' + newId + '',
-                type: "PUT",
-                data: { id: newId, item: $('#updateitem').val(), Quantity: $('#updateQuantity').val(), Priority: $('#updatePriority').val() },
-                success: function (result) {
-                    // console.log(result);
-                    // for(var i = 0 ; i < result.length; ++i){
-                    //     console.log("delete")
-                        console.log($('tbody')[0])
-                        // for(var i = 0; i < $('tbody')[0].length; ++i){
-                        //     console.log("loop, true")
-                        //     if($('tbody')[0][i].id === result._id){
-                        //         console.log("true")
-                        //     }
-                        // }
-                        $("#"+result._id+'o').html(result.item);
-                        $("#"+result._id+'a').html(result.Quantity);
-                        $("#"+result._id+'s').html(result.Priority);
-                    // }
-                    // $("#"+result[0]._id).html(result[0].item);
-                    //delete all rows
-
-                    // retrieveAll();
-                    // for (var i = 0; i < result.length; ++i) {
-                    //     //  console.log(result[i].item)
-                    //     $('tbody').append("<tr id=" + result[i]._id + "><td>" + result[i].item + "</td><td>" + result[i].Quantity + "</td><td>" + result[i].Priority + "</td><td><button class='btn btn-info ' id='updateBtn'  DataId=" + result[i]._id + " >Update</button><button class='btn btn-success ' id='deleteBtn'>Delete</button></td></tr><br>")
-                    // }
-                    $("#tableni").show();
-                },
-                error: function (e) {
-                    console.error(e)
-                }
-
-            })
-        })
-        $(document).on('click', "#deleteBtn", (function () {
-            var id = $(this).closest("tr").attr("id")
-            $.ajax({
-                url: '/item/delete',
-                type: 'Delete',
-                dataType: 'JSON',
-                data: { id: id },
-                error: function (err) {
-                    alert(err)
-                },
-                success: function (result) {
-                    console.log(result)
-                    $('#' + id).remove();
-                    alert(result.message)
-                }
-            })
-        }))
-
-
-
-
-    })
-</script>
 
 <body>
     <center>
         <div id="tableni">
-            <h1>GroceryList</h1>
+            <h1>Book Inventory</h1>
             <div class="container">
-                <button class="btn btn-info" id="createbtn" type="button">Create</button><br>
+                <button class="btn btn-info btn-lg" id="createbtn" data-toggle="modal" data-target="#myModal" type="button">Create</button><br>
             </div>
-
+            <br>
             </form>
             <div class="container">
                 <table class="table table-dark">
                     <thead>
                         <tr>
                             <center>
-                                <th>Item</th>
+                                <th>Book</th>
+                                <th>Author</th>
                                 <th>Quantity</th>
-                                <th>Priority</th>
                                 <th>Action</th>
                             </center>
                         </tr>
                     </thead>
                     <tbody>
-
-
                     </tbody>
                 </table>
             </div>
         </div><br><br><br>
-        <div id="formni">
-            <form class="form">
-                <center>
-                    <fieldset>
 
-                        <h1>Add Item</h1>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-shopping-cart"></i></span>
-                            <input id="item" type="text" class="form-control" name="item" placeholder="Enter Name of Item"
-                                required>
+        <div class="container">
+            <div class="modal" id="myModal">
+                <div class="modal-dialog ">
+                    <div class="modal-content default">
+                        <div class="modal-header">
+                            <h1>Add Book</h1>
                         </div>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-plus-sign"></i></span>
-                            <input id="Quantity" type="number" class="form-control" name="Quantity" placeholder="Quantity"
-                                required>
+                        <div class="modal-body">
+                            <h3>Book name:</h3>
+                            <div class="input-group">
+                                <input id="item" type="url" class="form-control" name="item" placeholder="Enter Name of Book"
+                                    required>
+                            </div>
+                            <h3>Name of the Author:</h3>
+                            <div class="input-group">
+                                <input id="Author" type="url" class="form-control" name="Author" placeholder="Author">
+                            </div>
+                            <h3>Quantity:</h3>
+                            <div class="input-group">
+                                <input id="Quantity" type="number" class="form-control" name="Quantity" placeholder="Quantity"
+                                    required>
+                            </div>
+                            <br>
                         </div>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-plus"></i></span>
-                            <input id="Priority" type="number" class="form-control" name="Priority" placeholder="Priority"
-                                required>
+                        <div class="modal-footer">
+                            <button type="button" id="addItems" class="btn btn-success " data-dismiss="modal">Add
+                                Book</button>
+                            <button type="button" id="cancelbtn" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                         </div>
-                        <br>
 
-                    </fieldset>
-                </center>
-                <button type="button" id="addItems" class="btn btn-info">Add Items</button>
-                <button type="button" id="cancelbtn" class="btn btn-danger">Cancel</button>
-
-            </form>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div id="formUpdate">
-            <form class="form">
-                <fieldset>
-                    <center>
-                        <h1>Update Item</h1>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-shopping-cart"></i></span>
-                            <input id="updateitem" type="text" class="form-control" name="item" placeholder="Item">
+        <div class="container bg-dark updateModals">
+            <div class="modal myModal" id="myModalupdate" >
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1>Update Book</h1>
                         </div>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-plus-sign"></i></span>
-                            <input id="updateQuantity" type="number" class="form-control" name="Quantity" placeholder="Quantity">
+                        <div class="modal-body">
+                            <h3>Book name:</h3>
+                            <div class="input-group">
+                                <input id="updateitem" type="text" class="form-control" name="item" placeholder="Item" autofocus>
+                            </div>
+                            <h3>Name of the Author:</h3>:</h3>
+                            <div class="input-group">
+                                <input id="updateAuthor" type="text" class="form-control" name="Author" placeholder="Author">
+                            </div>
+                            <h3>Quantity:</h3>
+                            <div class="input-group">
+                                <input id="updateQuantity" type="number" class="form-control" name="Quantity"
+                                    placeholder="Quantity of books">
+                            </div>
+                            <br>
+                            <br>
                         </div>
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-plus"></i></span>
-                            <input id="updatePriority" type="number" class="form-control" name="Priority" placeholder="Priority">
+                        <div class="modal-footer">
+                            <button type="button" id="updateItems" class="btn btn-success"  data-dismiss="modal">Update
+                                Book</button>
+                            <!-- <button type="button" id="cancelbtns" class="btn btn-danger">Cancel</button> -->
+                            <!-- <button type="button" id="cancelbtn"  class="btn btn-danger" data-dismiss="modal">Cancel</button> -->
+
                         </div>
-                        <br>
-                    </center>
-                </fieldset>
-                <button type="button" id="updateItems" class="btn btn-info">Update Items</button>
-            </form>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </center>
 
 
