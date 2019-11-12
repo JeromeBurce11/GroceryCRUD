@@ -3,18 +3,18 @@ const uniqueValidator = require('mongoose-unique-validator')
 const Schema = mongoose.Schema;
 
 var Item = new Schema({
-  
-    item:{
+
+    item: {
         type: String,
         require: true,
         unique: true
     },
-    Author:{
+    Author: {
         type: String,
         require: true
         // unique: true
     },
-    Quantity:{
+    Quantity: {
         type: Number,
         require: true
     },
