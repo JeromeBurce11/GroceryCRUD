@@ -59,15 +59,18 @@ $(document).ready(function () {
         $('tbody').append("<tr id=" + result[i]._id + "  ><td>" + result[i].item + "</td><td>" + result[i].Author + "</td><td>" + result[i].Quantity + "</td><td><button  data-toggle='modal' data-target='#myModalupdate' class='btn btn-outline-info' DataId=" + result[i]._id + ">Update</button><button class='btn btn-outline-danger ' id='deleteBtn'>Delete</button></td></tr>" + "<br>")
     }
 
-
+    var data = []
     function retrieveAll() {
         $.ajax({
             url: '/item/retrieve/all',
             type: 'get',
             success: function (result) {
                 var item = result
+                
+                data = item
                 for (var i = 0; i < item.length; ++i) {
-                    $('tbody').append("<tr id=" + item[i]._id + "><td id=" + item[i]._id + 'o' + ">" + item[i].item + "</td><td id=" + item[i]._id + 'b' + ">" + item[i].Author + "</td><td id=" + item[i]._id + 'a' + ">" + item[i].Quantity + "</td><td><button  id='updateBtn' data-toggle='modal' data-target='#myModalupdate' class='btn btn-outline-info'  DataId=" + item[i]._id + " >Update</button><button class='btn btn-outline-danger ' id='deleteBtn'>Delete</button></td></tr><br>");
+
+                    $('tbody').append("<tr id=" + item[i].item + "><td id=" + item[i]._id + 'o' + ">" + item[i].item + "</td><td id=" + item[i]._id + 'b' + ">" + item[i].Author + "</td><td id=" + item[i]._id + 'a' + ">" + item[i].Quantity + "</td><td><button  id='updateBtn' data-toggle='modal' data-target='#myModalupdate' class='btn btn-outline-info'  DataId=" + item[i]._id + " >Update</button><button class='btn btn-outline-danger ' id='deleteBtn'>Delete</button></td></tr><br>");
 
 
                 }
@@ -112,6 +115,28 @@ $(document).ready(function () {
             }
         })
     })
+
+
+
+    $("#addItems").on('click', function () {
+        $.ajax({
+            url: 'item/',
+            type: "PUT",
+            data: { item: $('#item').val(), Author: $('#Author').val(), Quantity: $('#Quantity').val() },
+            success: function (result) {
+                $('tbody').empty();
+                retrieveAll();
+                swal("Successfully added!", "You clicked the button!", "success");
+                $('input').val('');
+                // window.location.reload();
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        })
+    })
+
+
 
 
     $(document).on('click', '#updateBtn', function (e) {
@@ -171,5 +196,57 @@ $(document).ready(function () {
             }
         })
     }))
+
+    // searching in the search bar
+    $("#btnsearch").on('click', function () {
+        // var id = $('#searchNisya').val();
+        // $("body").find().css({
+        //     "display":"none"
+        // })
+        // $("tr").find(id).css({
+        //     "display":"block"
+        // })
+        // console.log(id)
+        var x = $('#searchNisya').val();
+        console.log(x);
+        $.ajax({
+            url: '/items/search',
+            type: "GET",
+            data:JSON.stringify({x:x}),
+            success: function (response) {
+               console.log(response[5].item)
+                // for (var a = 0; a < response.length; a++) {
+                //     var book = response.item;
+                //     if (book.toLowerCase().startsWith(x.toLowerCase())) {
+                //         console.log(book);
+                //         retrieveAll();
+                //     }
+                // }
+            },
+            // error: function (err) {
+            //     console.log(err)
+            // }
+        });
+
+    })
+
+    // $("#btnsearch").click(function () {
+   
+    //     for (i = 0; i < data.length; i++) {
+    //         console.log(data[i].item , " == ", $('#searchNisya').val())
+    //         console.log(data[i].item==$('#searchNisya').val())
+    //         if(data[i].item==$('td').find($('#searchNisya').val())){
+    //             console.log('yehey!!!')
+    //         }
+    //         if(data[i].item == $('#search').val()) {
+    //             console.log("inside = "+data[i])
+    //         }else{
+    //             console.log("not")
+    //         }
+            
+    //     }
+    // })
+
+
 
 })

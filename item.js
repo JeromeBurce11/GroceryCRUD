@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator')
 const Schema = mongoose.Schema;
 
+var url = "mongodb://localhost:27017/shop";
+mongoose.set('useCreateIndex', true);
+mongoose.connect(url, { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true })
+
 var Item = new Schema({
 
     item: {

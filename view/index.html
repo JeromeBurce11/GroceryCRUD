@@ -13,9 +13,46 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="script.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 <style>
+
+    .form-control:focus {
+  box-shadow: none;
+}
+
+.form-control-underlined {
+  border-width: 0;
+  border-bottom-width: 1px;
+  border-radius: 0;
+  padding-left: 0;
+}
+li{
+    margin-top: 5px;
+    text-align: center;
+
+}
+#search{
+    width: 40%;
+}
+body {
+  background: #ffd89b;
+  background: -webkit-linear-gradient(to right, #ffd89b, #19547b);
+  background: linear-gradient(to right, #ffd89b, #19547b);
+  min-height: 100vh;
+}
+
+.form-control::placeholder {
+  font-size: 0.95rem;
+  color: #aaa;
+  font-style: italic;
+}
+#search{
+    width: 300px;
+    font-size: 12px;
+}
     h1{
-        font-size: 30px;
+        font-size: 25px;
+        color: #17a2b8;
     }
     fieldset {
         width: 30%;
@@ -39,34 +76,46 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
     <div class="container">
-    
-      <h1  >Book Inventory</h1>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+
+        <h1>Book Inventory</h1>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+            aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-          </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-                <div class="container">
-                        <button class="btn btn-outline-info btn-lg" id="createbtn" data-toggle="modal" data-target="#myModal" type="button">Create</button><br>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+              
+                    <div class="p-2 bg-light rounded rounded-pill shadow-lg lb-7 ">
+                        <div class="input-group">
+                           
+                            <input id="searchNisya" placeholder="Search for a Book?"
+                                class="form-control border-0 bg-light">
+                            <div class="input-group-append">
+                                <button id="btnsearch" type="button" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
                     </div>
-            <!-- <a class="nav-link" href="#">Home
-                  <span class="sr-only">(current)</span>
-                </a> -->
-          </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-          <li class="nav-item">
+             
+                <li class="nav-item active">
+                    <div class="container">
+                        <button class="btn btn-outline-info btn-lg" id="createbtn" data-toggle="modal" data-target="#myModal"
+                            type="button">Add Book</button><br>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-outline-info btn-lg" id="createbtn" data-toggle="modal" data-target="#myModal"
+                        type="button">Borrow</button><br>
+                </li>
+                <!-- <li class="nav-item">
             <a class="nav-link" href="#">Services</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Contact</a>
-          </li> -->
-        </ul>
-      </div>
+          </li>  -->
+            </ul>
+        </div>
     </div>
-  </nav>
+</nav>
 <!--   
   Full Page Image Header with Vertically Centered Content
   <header class="masthead">
@@ -78,23 +127,13 @@
         </div>
       </div>
     </div>
-  </header>
+  </header> -->
   
-
-  <section class="py-5">
-    <div class="container">
-      <h2 class="font-weight-light">Page Content</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus ab nulla dolorum autem nisi officiis blanditiis voluptatem hic, assumenda aspernatur facere ipsam nemo ratione cumque magnam enim fugiat reprehenderit expedita.</p>
-    </div>
-  </section> -->
+<br><br><br>
 <body>
     <center>
         <div id="tableni">
-            <h1>Book Inventory</h1>
-            <!-- <div class="container">
-                <button class="btn btn-info btn-lg" id="createbtn" data-toggle="modal" data-target="#myModal" type="button">Create</button><br>
-            </div> -->
-            <br>
+            <br><br>
             </form>
             <div class="container">
                 <table class="table table-dark">
@@ -150,7 +189,7 @@
         </div>
 
         <div class="container bg-dark updateModals">
-            <div class="modal myModal" id="myModalupdate" >
+            <div class="modal myModal" id="myModalupdate">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -159,7 +198,8 @@
                         <div class="modal-body">
                             <h3>Book name:</h3>
                             <div class="input-group">
-                                <input id="updateitem" type="text" class="form-control" name="item" placeholder="Item" autofocus>
+                                <input id="updateitem" type="text" class="form-control" name="item" placeholder="Item"
+                                    autofocus>
                             </div>
                             <h3>Name of the Author:</h3>:</h3>
                             <div class="input-group">
@@ -174,7 +214,7 @@
                             <br>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" id="updateItems" class="btn btn-success"  data-dismiss="modal">Update
+                            <button type="button" id="updateItems" class="btn btn-success" data-dismiss="modal">Update
                                 Book</button>
                             <!-- <button type="button" id="cancelbtns" class="btn btn-danger">Cancel</button> -->
                             <!-- <button type="button" id="cancelbtn"  class="btn btn-danger" data-dismiss="modal">Cancel</button> -->
