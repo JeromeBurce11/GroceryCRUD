@@ -1,8 +1,6 @@
 $(document).ready(function () {
-
-
-
-    retrieveAll();
+    $('#notavai').hide();
+    //  retrieveAll();
     var id;
     $("#formni").hide();
     $("#formUpdate").hide();
@@ -22,7 +20,74 @@ $(document).ready(function () {
         $("#tableni").hide();
         $("#formUpdate").show();
     })
+    $('#notavai').hide();
 
+    function search() {
+
+        $.ajax({
+
+            success: function () {
+                $("#searchNisya").on("keyup", function () {
+                    var value = $(this).val();
+                    $("tbody tr").each(function () {
+                        // if (index !== 0) {
+                        $row = $(this);
+                        var id = $row.find("td").text()
+                        if (id.indexOf(value) == false) {
+                            $('#notavai').show();
+                        }
+                        if (id.indexOf(value) !== 0) {
+
+                            $row.hide();
+                        }
+                        else {
+                            $('#notavai').hide();
+                            $row.show();
+
+                        }
+                        // }
+                    });
+                });
+
+            },
+            error: function () {
+
+                alert("Result Not Found");
+                $("button").attr("disabled", false);
+            }
+
+        });
+    }
+    retrieveAll();
+    search();
+
+    // function searching(){
+    //     $("#searchNisya").on("keyup", function () {
+    //         var value = $(this).val();
+    //         $("tbody tr").each(function () {
+    //             // if (index !== 0) {
+    //                 $row = $(this);
+    //                 var id = $row.find("td").text()
+    //                 if(id.indexOf(value)==false){
+    //                     $('#notavai').show();
+    //                 }
+    //                 if (id.indexOf(value) !== 0) {
+
+    //                    $row.hide();
+    //                 }
+    //                 else {   
+    //                     $('#notavai').hide();
+    //                     $row.show();
+
+    //                 }
+    //             // }
+    //         });
+    //     });
+    // }
+    // searching();
+    // if($("#searchNisya").val()==''){
+    //     retrieveAll();
+    // }
     $('#addItems').prop('disabled', 'disabled');
     $('#Author').prop('disabled', 'disabled');
     $('#Quantity').prop('disabled', 'disabled');
@@ -51,7 +116,8 @@ $(document).ready(function () {
         }
     })
 
-    $('input').val(" ");
+    $('input').val("");
+
 
 
     //addRowFunction
@@ -66,7 +132,7 @@ $(document).ready(function () {
             type: 'get',
             success: function (result) {
                 var item = result
-                
+
                 data = item
                 for (var i = 0; i < item.length; ++i) {
 
@@ -198,40 +264,40 @@ $(document).ready(function () {
     }))
 
     // searching in the search bar
-    $("#btnsearch").on('click', function () {
-        // var id = $('#searchNisya').val();
-        // $("body").find().css({
-        //     "display":"none"
-        // })
-        // $("tr").find(id).css({
-        //     "display":"block"
-        // })
-        // console.log(id)
-        var x = $('#searchNisya').val();
-        console.log(x);
-        $.ajax({
-            url: '/items/search',
-            type: "GET",
-            data:JSON.stringify({x:x}),
-            success: function (response) {
-               console.log(response[5].item)
-                // for (var a = 0; a < response.length; a++) {
-                //     var book = response.item;
-                //     if (book.toLowerCase().startsWith(x.toLowerCase())) {
-                //         console.log(book);
-                //         retrieveAll();
-                //     }
-                // }
-            },
-            // error: function (err) {
-            //     console.log(err)
-            // }
-        });
+    // $("#btnsearch").on('click', function () {
+    // var id = $('#searchNisya').val();
+    // $("body").find().css({
+    //     "display":"none"
+    // })
+    // $("tr").find(id).css({
+    //     "display":"block"
+    // })
+    // console.log(id)
+    //     var x = $('#searchNisya').val();
+    //     console.log(x);
+    //     $.ajax({
+    //         url: '/items/search',
+    //         type: "GET",
+    //         data:JSON.stringify({x:x}),
+    //         success: function (response) {
+    //            console.log(response[5].item)
+    //             // for (var a = 0; a < response.length; a++) {
+    //             //     var book = response.item;
+    //             //     if (book.toLowerCase().startsWith(x.toLowerCase())) {
+    //             //         console.log(book);
+    //             //         retrieveAll();
+    //             //     }
+    //             // }
+    //         },
+    //         // error: function (err) {
+    //         //     console.log(err)
+    //         // }
+    //     });
 
-    })
+    // })
 
     // $("#btnsearch").click(function () {
-   
+
     //     for (i = 0; i < data.length; i++) {
     //         console.log(data[i].item , " == ", $('#searchNisya').val())
     //         console.log(data[i].item==$('#searchNisya').val())
@@ -243,7 +309,7 @@ $(document).ready(function () {
     //         }else{
     //             console.log("not")
     //         }
-            
+
     //     }
     // })
 

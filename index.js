@@ -49,20 +49,20 @@ app.get('/item/retrieve/all', function (req, res) {
         }
     })
 })
-app.all('/items/search', function(req, res) {
-    // Item.find({ item: { $regex : ".*"+ req.query.search +".*", $options:'i' } }, function(err, result){
-    //     console.log(result);
-    //     return res.status(200).json({result:result})  
-    //  });
-    Item.find(req.body, function (err, item) {
-        if (err) {
-            console.log('err')
-        } else {
-            res.send(item)
-            console.log(item)
-        }
-    })
- });
+// app.all('/items/search', function(req, res) {
+//     // Item.find({ item: { $regex : ".*"+ req.query.search +".*", $options:'i' } }, function(err, result){
+//     //     console.log(result);
+//     //     return res.status(200).json({result:result})  
+//     //  });
+//     Item.find(req.body, function (err, item) {
+//         if (err) {
+//             console.log('err')
+//         } else {
+//             res.send(item)
+//             console.log(item)
+//         }
+//     })
+//  });
 
 app.get('/item/retrieve/:id', function (req, res) {
     Item.findById({ _id: req.params.id })
