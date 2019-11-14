@@ -21,43 +21,31 @@ $(document).ready(function () {
         $("#formUpdate").show();
     })
     $('#notavai').hide();
-
     function search() {
-
-        $.ajax({
-
-            success: function () {
-                $("#searchNisya").on("keyup", function () {
-                    var value = $(this).val();
-                    $("tbody tr").each(function () {
-                        // if (index !== 0) {
-                        $row = $(this);
-                        var id = $row.find("td").text()
-                        if (id.indexOf(value) == false) {
-                            $('#notavai').show();
-                        }
-                        if (id.indexOf(value) !== 0) {
-
-                            $row.hide();
-                        }
-                        else {
-                            $('#notavai').hide();
-                            $row.show();
-
-                        }
-                        // }
-                    });
-                });
-
-            },
-            error: function () {
-
-                alert("Result Not Found");
-                $("button").attr("disabled", false);
+        $("#searchNisya").on("keyup", function () {
+            var value = $(this).val();
+            if (value ==""){
+                $('#notavai').hide();
             }
+            $("tbody tr").each(function () {
+                // if (index !== 0) {
+                $row = $(this);
+                var id = $row.find("td").text()
+                if (id.indexOf(value) !== 0) {  
+                     $('thead').hide();
 
+                        $row.hide();
+                }
+                else {
+                    $('thead').show();
+                    $row.show();
+                }
+                // }
+            });
         });
+
     }
+
     retrieveAll();
     search();
 
@@ -264,54 +252,37 @@ $(document).ready(function () {
     }))
 
     // searching in the search bar
-    // $("#btnsearch").on('click', function () {
-    // var id = $('#searchNisya').val();
-    // $("body").find().css({
-    //     "display":"none"
-    // })
-    // $("tr").find(id).css({
-    //     "display":"block"
-    // })
-    // console.log(id)
-    //     var x = $('#searchNisya').val();
-    //     console.log(x);
-    //     $.ajax({
-    //         url: '/items/search',
-    //         type: "GET",
-    //         data:JSON.stringify({x:x}),
-    //         success: function (response) {
-    //            console.log(response[5].item)
-    //             // for (var a = 0; a < response.length; a++) {
-    //             //     var book = response.item;
-    //             //     if (book.toLowerCase().startsWith(x.toLowerCase())) {
-    //             //         console.log(book);
-    //             //         retrieveAll();
-    //             //     }
-    //             // }
-    //         },
-    //         // error: function (err) {
-    //         //     console.log(err)
-    //         // }
-    //     });
+    $("#btnsearch").on('click', function () {
+    console.log(id)
+        var x = $('#searchNisya').val();
+        console.log(x);
+        $.ajax({
+            url: '/items/search',
+            type: "GET",
+            data:JSON.stringify({x:x}),
+            success: function (response) {
+                for(i =0;i<response.length;i++){
+                    console.log(response[i].item)
+                    if(response[i].item ==x ){
+                     
+                        $('tbody').append("<tr id=" + response[i]._id + "  ><td>" + response[i].item + "</td><td>" + response[i].Author + "</td><td>" + response[i].Quantity + "</td><td><button  data-toggle='modal' data-target='#myModalupdate' class='btn btn-outline-info' DataId=" + response[i]._id + ">Update</button><button class='btn btn-outline-danger ' id='deleteBtn'>Delete</button></td></tr>" + "<br>")
+                    }
+                    else{
+                        $('thead').hide();
+                            $('#notavai').show();
+                        
+                        
+                    }
+                }
+              
+              
+            },
+         
+        });
 
-    // })
+    })
 
-    // $("#btnsearch").click(function () {
-
-    //     for (i = 0; i < data.length; i++) {
-    //         console.log(data[i].item , " == ", $('#searchNisya').val())
-    //         console.log(data[i].item==$('#searchNisya').val())
-    //         if(data[i].item==$('td').find($('#searchNisya').val())){
-    //             console.log('yehey!!!')
-    //         }
-    //         if(data[i].item == $('#search').val()) {
-    //             console.log("inside = "+data[i])
-    //         }else{
-    //             console.log("not")
-    //         }
-
-    //     }
-    // })
+ 
 
 
 
