@@ -48,34 +48,6 @@ $(document).ready(function () {
 
     retrieveAll();
     search();
-
-    // function searching(){
-    //     $("#searchNisya").on("keyup", function () {
-    //         var value = $(this).val();
-    //         $("tbody tr").each(function () {
-    //             // if (index !== 0) {
-    //                 $row = $(this);
-    //                 var id = $row.find("td").text()
-    //                 if(id.indexOf(value)==false){
-    //                     $('#notavai').show();
-    //                 }
-    //                 if (id.indexOf(value) !== 0) {
-
-    //                    $row.hide();
-    //                 }
-    //                 else {   
-    //                     $('#notavai').hide();
-    //                     $row.show();
-
-    //                 }
-    //             // }
-    //         });
-    //     });
-    // }
-    // searching();
-    // if($("#searchNisya").val()==''){
-    //     retrieveAll();
-    // }
     $('#addItems').prop('disabled', 'disabled');
     $('#Author').prop('disabled', 'disabled');
     $('#Quantity').prop('disabled', 'disabled');
@@ -124,7 +96,7 @@ $(document).ready(function () {
                 data = item
                 for (var i = 0; i < item.length; ++i) {
 
-                    $('tbody').append("<tr id=" + item[i].item + "><td id=" + item[i]._id + 'o' + ">" + item[i].item + "</td><td id=" + item[i]._id + 'b' + ">" + item[i].Author + "</td><td id=" + item[i]._id + 'a' + ">" + item[i].Quantity + "</td><td><button  id='updateBtn' data-toggle='modal' data-target='#myModalupdate' class='btn btn-outline-info'  DataId=" + item[i]._id + " >Update</button><button class='btn btn-outline-danger ' id='deleteBtn'>Delete</button></td></tr><br>");
+                    $('tbody').append("<tr id=" + item[i].item + "><td id=" + item[i]._id + 'o' + ">" + item[i].item + "</td><td id=" + item[i]._id + 'b' + ">" + item[i].Author + "</td><td id=" + item[i]._id + 'a' + ">" + item[i].Quantity + "</td><td><button  id='updateBtn' data-toggle='modal' data-target='#myModalupdate' class='btn btn-outline-info'  DataId=" + item[i]._id + " >Update</button><button class='btn btn-outline-danger ' DataId=" + item[i]._id + " id='deleteBtn'>Delete</button></td></tr><br>");
 
 
                 }
@@ -171,28 +143,6 @@ $(document).ready(function () {
     })
 
 
-
-    $("#addItems").on('click', function () {
-        $.ajax({
-            url: 'item/',
-            type: "PUT",
-            data: { item: $('#item').val(), Author: $('#Author').val(), Quantity: $('#Quantity').val() },
-            success: function (result) {
-                $('tbody').empty();
-                retrieveAll();
-                swal("Successfully added!", "You clicked the button!", "success");
-                $('input').val('');
-                // window.location.reload();
-            },
-            error: function (e) {
-                console.log(e);
-            }
-        })
-    })
-
-
-
-
     $(document).on('click', '#updateBtn', function (e) {
         e.preventDefault(e);
         $("#tableni").hide();
@@ -233,21 +183,24 @@ $(document).ready(function () {
     })
     $(document).on('click', "#deleteBtn", (function () {
         // console.log("1")
-        var id = $(this).closest("tr").attr("id")
+        var id = $(this).attr("Dataid")
         $.ajax({
             url: '/item/delete',
             type: 'Delete',
             dataType: 'JSON',
             data: { id: id },
-            error: function (err) {
-                // alert(err)
-                console.log(err)
-            },
+            
             success: function (result) {
                 console.log(result)
                 swal("Successfully deleted!", "You clicked the button!", "success");
                 $('#' + id).remove();
-            }
+                $('tbody').empty();
+                retrieveAll();
+            },
+            error: function (err) {
+                // alert(err)
+                console.log(err)
+            },
         })
     }))
 
