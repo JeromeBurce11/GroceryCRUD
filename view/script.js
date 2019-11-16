@@ -2,6 +2,7 @@ $(document).ready(function () {
     $('#notavai').hide();
     //  retrieveAll();
     var id;
+
     $("#formni").hide();
     $("#formUpdate").hide();
     $("#createbtn").click(function () {
@@ -12,6 +13,10 @@ $(document).ready(function () {
         $("#formni").hide();
         $("#tableni").show();
     })
+    $("#cancelbtn").click(function () {
+        location.reload();
+    })
+    
     $("#cancelbtn").click(function () {
         $("#formni").hide();
         $("#tableni").show();
@@ -24,23 +29,21 @@ $(document).ready(function () {
     function search() {
         $("#searchNisya").on("keyup", function () {
             var value = $(this).val();
-            if (value ==""){
+            if (value == "") {
                 $('#notavai').hide();
             }
             $("tbody tr").each(function () {
-                // if (index !== 0) {
                 $row = $(this);
                 var id = $row.find("td").text()
-                if (id.indexOf(value) !== 0) {  
-                     $('thead').hide();
+                if (id.indexOf(value) !== 0) {
+                    $('thead').hide();
 
-                        $row.hide();
+                    $row.hide();
                 }
                 else {
                     $('thead').show();
                     $row.show();
                 }
-                // }
             });
         });
 
@@ -95,10 +98,7 @@ $(document).ready(function () {
 
                 data = item
                 for (var i = 0; i < item.length; ++i) {
-
-                    $('tbody').append("<tr id=" + item[i].item + "><td id=" + item[i]._id + 'o' + ">" + item[i].item + "</td><td id=" + item[i]._id + 'b' + ">" + item[i].Author + "</td><td id=" + item[i]._id + 'a' + ">" + item[i].Quantity + "</td><td><button  id='updateBtn' data-toggle='modal' data-target='#myModalupdate' class='btn btn-outline-info'  DataId=" + item[i]._id + " >Update</button><button class='btn btn-outline-danger ' DataId=" + item[i]._id + " id='deleteBtn'>Delete</button></td></tr><br>");
-
-
+                    $('tbody').append("<tr id=" + item[i].item + "><td id=" + item[i]._id + 'o' + ">" + item[i].item + "</td><td id=" + item[i]._id + 'b' + ">" + item[i].Author + "</td><td id=" + item[i]._id + 'a' + ">" + item[i].Quantity + "</td><td><button class='btn btn-outline-info ' id='borrowBtn' data-toggle=modal data-target='#myModalborrow' type='button' DataId=" + item[i]._id + ">Borrow </button><button  id='updateBtn' data-toggle='modal' data-target='#myModalupdate' class='btn btn-outline-info'  DataId=" + item[i]._id + " >Update</button><button class='btn btn-outline-danger ' DataId=" + item[i]._id + " id='deleteBtn'>Delete</button></td></tr><br>");
                 }
             }
         })
@@ -110,10 +110,22 @@ $(document).ready(function () {
             url: '/item/retrieve/' + DataId + '',
             type: 'get',
             success: function (result) {
-                console.log(result)
                 $('#updateitem').val(result.item)
                 $('#updateAuthor').val(result.Author)
                 $('#updateQuantity').val(result.Quantity)
+            },
+            error: function (e) {
+                console.error(e)
+            }
+        })
+    }
+    function retrieveOneItemInTheBorrowModal(DataId) {
+        $.ajax({
+            url: '/item/retrieve/' + DataId + '',
+            type: 'get',
+            success: function (result) {
+                $('#itemborrowed').val(result.item)
+                $('#availableitem').val((result.Quantity).toString())
             },
             error: function (e) {
                 console.error(e)
@@ -134,7 +146,6 @@ $(document).ready(function () {
                 retrieveAll();
                 swal("Successfully added!", "You clicked the button!", "success");
                 $('input').val('');
-                // window.location.reload();
             },
             error: function (e) {
                 console.log(e);
@@ -147,11 +158,7 @@ $(document).ready(function () {
         e.preventDefault(e);
         $("#tableni").hide();
         $("#myModalupdate").show();
-        // $("#myModalupdate").attr("hidden", false);
         id = $(this).attr("DataId");
-
-        // alert(id)
-
         retrieveOneItem($(this).attr("DataId") + "")
     })
 
@@ -181,15 +188,45 @@ $(document).ready(function () {
 
         })
     })
+    // items show in the modal of the borrower template 
+
+    $(document).on('click', '#borrowBtn', function (e) {
+        e.preventDefault(e);
+        $("#tableni").hide();
+        id = $(this).attr("DataId");
+        retrieveOneItemInTheBorrowModal($(this).attr("DataId") + "")
+       
+    })
+    $("#BorrowItems").click(function () {
+        $("#myModalborrow").hide();
+        var newId = id;
+        $.ajax({
+            url: '/item/update/' + newId,
+            type: "PUT",
+            data: { id: newId,  borrowQuantity: $('#noofbooks').val() },
+            success: function (result) {
+                console.log(result)
+                var newQuantity = result.Quantity-borrowQuantity;
+                console.log(newQuantity)
+                $("#" + result._id + 'a').html(newQuantity);
+                $("#tableni").show();
+            },
+            error: function (e) {
+                console.error(e)
+            }
+
+        })
+    })
+
+    //ajax for delete button
     $(document).on('click', "#deleteBtn", (function () {
-        // console.log("1")
         var id = $(this).attr("Dataid")
         $.ajax({
             url: '/item/delete',
             type: 'Delete',
             dataType: 'JSON',
             data: { id: id },
-            
+
             success: function (result) {
                 console.log(result)
                 swal("Successfully deleted!", "You clicked the button!", "success");
@@ -206,37 +243,33 @@ $(document).ready(function () {
 
     // searching in the search bar
     $("#btnsearch").on('click', function () {
-    console.log(id)
+        console.log(id)
         var x = $('#searchNisya').val();
         console.log(x);
         $.ajax({
             url: '/items/search',
             type: "GET",
-            data:JSON.stringify({x:x}),
+            data: JSON.stringify({ x: x }),
             success: function (response) {
-                for(i =0;i<response.length;i++){
+                for (i = 0; i < response.length; i++) {
                     console.log(response[i].item)
-                    if(response[i].item ==x ){
-                     
+                    if (response[i].item == x) {
+
                         $('tbody').append("<tr id=" + response[i]._id + "  ><td>" + response[i].item + "</td><td>" + response[i].Author + "</td><td>" + response[i].Quantity + "</td><td><button  data-toggle='modal' data-target='#myModalupdate' class='btn btn-outline-info' DataId=" + response[i]._id + ">Update</button><button class='btn btn-outline-danger ' id='deleteBtn'>Delete</button></td></tr>" + "<br>")
                     }
-                    else{
+                    else {
                         $('thead').hide();
-                            $('#notavai').show();
-                        
-                        
+                        $('#notavai').show();
+
+
                     }
                 }
-              
-              
+
+
             },
-         
+
         });
 
     })
-
- 
-
-
 
 })

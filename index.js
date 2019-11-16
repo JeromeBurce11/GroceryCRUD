@@ -30,11 +30,29 @@ app.put('/item/create', function (req, res) {
             } else {
                 res.json(item)
             }
-
         })
-
     })
 })
+
+app.put('/item/borrowbooks', function (req, res) {
+    let test = new Item(req.body)
+    console.log(req.body);
+    test.save(function (err, data) {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log(data + 'saved')
+        }
+        Item.find(req.body, function (err, item) {
+            if (err) {
+                console.log('err')
+            } else {
+                res.json(item)
+            }
+        })
+    })
+})
+
 
 app.get('/', function (req, res) {
     res.sendFile(__dirname + "/view/index.html");
@@ -50,10 +68,6 @@ app.get('/item/retrieve/all', function (req, res) {
     })
 })
 app.all('/items/search', function(req, res) {
-    // Item.find({ item: { $regex : ".*"+ req.query.search +".*", $options:'i' } }, function(err, result){
-    //     console.log(result);
-    //     return res.status(200).json({result:result})  
-    //  });
     Item.find(req.body, function (err, item) {
         if (err) {
             console.log('err')
@@ -73,6 +87,31 @@ app.get('/item/retrieve/:id', function (req, res) {
                 });
             }
             res.send(items);
+        }).catch(err => {
+            if (err.kind === 'ObjectId') {
+                return res.status(404).send({
+                    message: "items not found with id " + req.params.id
+                });
+            }
+            return res.status(500).send({
+                message: "Error retrieving items with id " + req.params.id
+            });
+        });
+})
+app.put('/item/update/:id', function (req, res) {
+    Item.findOneAndUpdate({ _id: req.body.id }, { Quantity: req.body.Quantity }, {
+        new: true,
+        upsert: true
+    })
+
+        .then(items => {
+            if (!items) {
+                return res.status(404).send({
+                    message: "items not found with id " + req.params.id
+                });
+            }
+            res.json(items);
+            // console.log(items)
         }).catch(err => {
             if (err.kind === 'ObjectId') {
                 return res.status(404).send({

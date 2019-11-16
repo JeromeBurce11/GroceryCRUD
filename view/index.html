@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <!-- <link rel="stylesheet" href="view/style.css"> -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -13,65 +16,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="script.js"></script>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+    crossorigin="anonymous">
 <style>
-
-    .form-control:focus {
-  box-shadow: none;
-}
-
-.form-control-underlined {
-  border-width: 0;
-  border-bottom-width: 1px;
-  border-radius: 0;
-  padding-left: 0;
-}
-li{
-    margin-top: 5px;
-    text-align: center;
-
-}
-#search{
-    width: 40%;
-}
-body {
-  background: #ffd89b;
-  background: -webkit-linear-gradient(to right, #ffd89b, #19547b);
-  background: linear-gradient(to right, #ffd89b, #19547b);
-  min-height: 100vh;
-}
-
-.form-control::placeholder {
-  font-size: 0.95rem;
-  color: #aaa;
-  font-style: italic;
-}
-#search{
-    width: 300px;
-    font-size: 12px;
-}
-    h1{
-        font-size: 25px;
-        color: #17a2b8;
-    }
-    fieldset {
-        width: 30%;
-    }
     body{
-        background: url(backGr.jpeg) no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-    }
-    .masthead {
-  height: 100vh;
-  min-height: 500px;
-  /* background-image: url('https://source.unsplash.com/BtbjCFUvBXs/1920x1080'); */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
+          background: url(backGr.jpeg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+      }
 </style>
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
@@ -84,34 +39,24 @@ body {
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-              
-                    <div class="p-2 bg-light rounded rounded-pill shadow-lg lb-7 ">
-                        <div class="input-group">
-                           
-                            <input id="searchNisya" placeholder="Search for a Book?"
-                                class="form-control border-0 bg-light">
-                            <div class="input-group-append">
-                                <button id="btnsearch" type="button" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
-                            </div>
+
+                <div class="p-2 bg-light rounded rounded-pill shadow-lg lb-7 ">
+                    <div class="input-group">
+
+                        <input id="searchNisya" placeholder="Search for a Book?" class="form-control border-0 bg-light">
+                        <div class="input-group-append">
+                            <button id="btnsearch" type="button" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
                         </div>
                     </div>
-             
+                </div>
+
                 <li class="nav-item active">
                     <div class="container">
                         <button class="btn btn-outline-info btn-lg" id="createbtn" data-toggle="modal" data-target="#myModal"
                             type="button">Add Book</button><br>
                     </div>
                 </li>
-                <li class="nav-item">
-                    <button class="btn btn-outline-info btn-lg" id="createbtn" data-toggle="modal" data-target="#myModal"
-                        type="button">Borrow</button><br>
-                </li>
-                <!-- <li class="nav-item">
-            <a class="nav-link" href="#">Services</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
-          </li>  -->
+
             </ul>
         </div>
     </div>
@@ -128,11 +73,12 @@ body {
       </div>
     </div>
   </header> -->
-  
+
 <br><br><br>
+
 <body>
     <center>
-        <img id="notavai" src="notavai.jpeg" alt="">
+
         <div id="tableni">
             <br><br>
             </form>
@@ -153,13 +99,14 @@ body {
                 </table>
             </div>
         </div><br><br><br>
-
+        <img id="notavai" src="notavai.jpeg" alt="">
         <div class="container">
             <div class="modal" id="myModal">
                 <div class="modal-dialog ">
                     <div class="modal-content default">
                         <div class="modal-header">
                             <h1>Add Book</h1>
+
                         </div>
                         <div class="modal-body">
                             <h3>Book name:</h3>
@@ -195,6 +142,7 @@ body {
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1>Update Book</h1>
+
                         </div>
                         <div class="modal-body">
                             <h3>Book name:</h3>
@@ -217,9 +165,42 @@ body {
                         <div class="modal-footer">
                             <button type="button" id="updateItems" class="btn btn-success" data-dismiss="modal">Update
                                 Book</button>
-                            <!-- <button type="button" id="cancelbtns" class="btn btn-danger">Cancel</button> -->
-                            <!-- <button type="button" id="cancelbtn"  class="btn btn-danger" data-dismiss="modal">Cancel</button> -->
+                                <button type="button" id="cancelbtn" class="btn btn-danger" >Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container bg-dark updateModals">
+            <div class="modal myModal" id="myModalborrow">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1>Borrow a Book</h1>
 
+                        </div>
+                        <div class="modal-body">
+                            
+                            <h3>Book name:</h3>
+                            <input  style="color:white;width:200px;font-size: 30px;" class="btn btn-primary" id="itemborrowed" disabled>
+                            <h3>Number of book/s available:</h3>
+                            <input  style="color:white;font-size: 30px;" class="btn btn-primary" id="availableitem" disabled>
+                            <h3>Enter borrower name:</h3>:
+                            <div class="input-group">
+                                <input id="Borrower" type="text" class="form-control" name="Borrower" placeholder="Borrower">
+                            </div>
+                            <h3 >Quantity:</h3>
+                            <div class="input-group">
+                                <input id="noofbooks" type="number" class="form-control" name="no."
+                                    placeholder="Number of books to be borrow.">
+                            </div>
+                            <br>
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="BorrowItems" class="btn btn-success" data-dismiss="modal">Borrow
+                                Book</button>
+                                <button type="button" id="cancelbtn" class="btn btn-danger">Cancel</button>
                         </div>
                     </div>
                 </div>

@@ -1,3 +1,57 @@
 input{
     width: 30%;
 }
+
+.form-control:focus {
+    box-shadow: none;
+  }
+  
+  .form-control-underlined {
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-radius: 0;
+    padding-left: 0;
+  }
+  li{
+      margin-top: 5px;
+      text-align: center;
+  
+  }
+  #search{
+      width: 40%;
+  }
+  body {
+    background: #ffd89b;
+    background: -webkit-linear-gradient(to right, #ffd89b, #19547b);
+    background: linear-gradient(to right, #ffd89b, #19547b);
+    min-height: 100vh;
+  }
+  
+  .form-control::placeholder {
+    font-size: 0.95rem;
+    color: #aaa;
+    font-style: italic;
+  }
+  #search{
+      width: 300px;
+      font-size: 12px;
+  }
+  #tableni{
+      width: 55%;
+  }
+      h1{
+          font-size: 25px;
+          color: #17a2b8;
+      }
+      fieldset {
+          width: 30%;
+      }
+     
+      .masthead {
+    height: 100vh;
+    min-height: 500px;
+    /* background-image: url('https://source.unsplash.com/BtbjCFUvBXs/1920x1080'); */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
