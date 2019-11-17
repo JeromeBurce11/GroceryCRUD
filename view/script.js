@@ -200,10 +200,11 @@ $(document).ready(function () {
     $("#BorrowItems").click(function () {
         $("#myModalborrow").hide();
         var newId = id;
+        borrowQuantity= $('#noofbooks').val()
         $.ajax({
-            url: '/item/update/' + newId,
+            url: '/item/update1/' + newId,
             type: "PUT",
-            data: { id: newId,  borrowQuantity: $('#noofbooks').val() },
+            data: { id: newId, borrowQuantity: borrowQuantity  },
             success: function (result) {
                 console.log(result)
                 var newQuantity = result.Quantity-borrowQuantity;

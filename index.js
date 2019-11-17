@@ -98,19 +98,20 @@ app.get('/item/retrieve/:id', function (req, res) {
             });
         });
 })
-app.put('/item/update/:id', function (req, res) {
-    Item.findOneAndUpdate({ _id: req.body.id }, { Quantity: req.body.Quantity }, {
+app.put('/item/update1/:id', function (req, res) {
+    Item.findOneAndUpdate({ _id: req.body.id }, { borrowQuantity: req.body.borrowQuantity }, {
         new: true,
         upsert: true
     })
 
-        .then(items => {
-            if (!items) {
+        .then(items1 => {
+            if (!items1) {
                 return res.status(404).send({
                     message: "items not found with id " + req.params.id
                 });
             }
-            res.json(items);
+            // console.log(items1)
+            res.json(items1);
             // console.log(items)
         }).catch(err => {
             if (err.kind === 'ObjectId') {
