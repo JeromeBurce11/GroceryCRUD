@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $('#notavai').hide();
     //  retrieveAll();
+    $('input').val("")
     var id;
     $("#book").show();
     $("#formni").hide();
@@ -8,7 +9,7 @@ $(document).ready(function () {
     $("#formUpdate").hide();
     $("#createbtn").click(function () {
         $("#book").show();
-        $("#formni").show();
+        $("#formni").hide();
         // $("#tableni").hide();
     })
     $("#viewbtn").click(function () {
@@ -22,13 +23,16 @@ $(document).ready(function () {
         $("#book").hide();
         $("#tableni").show();
     })
-    $("#cancelbtn").click(function () {
+    $("#cancelbtnborrow").click(function () {
+        // alert("mabuhay!")
         location.reload();
+      $('#myModalborrow11').hide();
     })
 
     $("#cancelbtn").click(function () {
         $("#formni").hide();
-        $("#tableni").show();
+        $("#tableni").hide();
+        $('input').val("")
     })
     $("#updateItems").click(function () {
         $("#tableni").hide();
