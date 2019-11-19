@@ -16,16 +16,16 @@ $(document).ready(function () {
         $("#formni").show();
         $("#tableni").show();
     })
-    
+
     $("#addItems").click(function () {
         $("#formni").hide();
         $("#book").hide();
-     $("#tableni").show();
+        $("#tableni").show();
     })
     $("#cancelbtn").click(function () {
         location.reload();
     })
-    
+
     $("#cancelbtn").click(function () {
         $("#formni").hide();
         $("#tableni").show();
@@ -34,20 +34,27 @@ $(document).ready(function () {
         $("#tableni").hide();
         $("#formUpdate").show();
     })
+    $('thead').show();
     $('#notavai').hide();
     function search() {
         $("#searchNisya").on("keyup", function () {
+            $('thead').hide();
+            $("#book").hide();
+            $("#tableni").show();
             var value = $(this).val();
             if (value == "") {
                 $('#notavai').hide();
+                $("#book").show();
+                $("#tableni").hide();
             }
             $("tbody tr").each(function () {
+                
                 $row = $(this);
                 var id = $row.find("td").text()
                 if (id.indexOf(value) !== 0) {
-                    $('thead').hide();
-
+                   
                     $row.hide();
+    
                 }
                 else {
                     $('thead').show();
@@ -196,21 +203,23 @@ $(document).ready(function () {
         $("#tableni").hide();
         id = $(this).attr("DataId");
         retrieveOneItemInTheBorrowModal($(this).attr("DataId") + "")
-       
+
     })
+    var QuantityUpdated ;
     $("#BorrowItems").click(function () {
         $("#myModalborrow").hide();
         var newId = id;
-        borrowQuantity= $('#noofbooks').val()
+        borrowQuantity = $('#noofbooks').val()
         $.ajax({
             url: '/item/update1/' + newId,
             type: "PUT",
-            data: { id: newId, borrowQuantity: borrowQuantity  },
+            data: { id: newId, borrowQuantity: borrowQuantity },
             success: function (result) {
                 console.log(result)
-                var newQuantity = result.Quantity-borrowQuantity;
+                var newQuantity = result.Quantity - borrowQuantity;
                 console.log(newQuantity)
                 $("#" + result._id + 'a').html(newQuantity);
+                QuantityUpdated = newQuantity;
                 $("#tableni").show();
             },
             error: function (e) {
@@ -245,6 +254,7 @@ $(document).ready(function () {
 
     // searching in the search bar
     $("#btnsearch").on('click', function () {
+      
         console.log(id)
         var x = $('#searchNisya').val();
         console.log(x);

@@ -5,7 +5,7 @@ var port = process.env.PORT || 8000;
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var Item = require('./item')
-
+var a;
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(bodyParser.json())
@@ -99,7 +99,8 @@ app.get('/item/retrieve/:id', function (req, res) {
         });
 })
 app.put('/item/update1/:id', function (req, res) {
-    Item.findOneAndUpdate({ _id: req.body.id }, { borrowQuantity: req.body.borrowQuantity }, {
+    console.log(a);
+    Item.findOneAndUpdate({ _id: req.body.id }, { borrowQuantity: a- req.body.borrowQuantity }, {
         new: true,
         upsert: true
     })
@@ -126,6 +127,7 @@ app.put('/item/update1/:id', function (req, res) {
 })
 
 app.put('/item/update/:id', function (req, res) {
+    a= req.body.Quantity;
     Item.findOneAndUpdate({ _id: req.body.id }, { item: req.body.item, Author: req.body.Author, Quantity: req.body.Quantity }, {
         new: true,
         upsert: true
