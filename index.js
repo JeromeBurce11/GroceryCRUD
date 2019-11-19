@@ -1,7 +1,7 @@
 var app = require('express')();
 var express = require('express');
 var http = require("http").Server(app)
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 8000;
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var Item = require('./item')

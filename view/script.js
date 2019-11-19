@@ -2,16 +2,25 @@ $(document).ready(function () {
     $('#notavai').hide();
     //  retrieveAll();
     var id;
-
+    $("#book").show();
     $("#formni").hide();
+    $("#tableni").hide();
     $("#formUpdate").hide();
     $("#createbtn").click(function () {
+        $("#book").show();
         $("#formni").show();
-        $("#tableni").hide();
+        // $("#tableni").hide();
     })
+    $("#viewbtn").click(function () {
+        $("#book").hide();
+        $("#formni").show();
+        $("#tableni").show();
+    })
+    
     $("#addItems").click(function () {
         $("#formni").hide();
-        $("#tableni").show();
+        $("#book").hide();
+     $("#tableni").show();
     })
     $("#cancelbtn").click(function () {
         location.reload();
@@ -80,15 +89,6 @@ $(document).ready(function () {
     })
 
     $('input').val("");
-
-
-
-    //addRowFunction
-    function addRow(data) {
-        $('tbody').append("<tr id=" + result[i]._id + "  ><td>" + result[i].item + "</td><td>" + result[i].Author + "</td><td>" + result[i].Quantity + "</td><td><button  data-toggle='modal' data-target='#myModalupdate' class='btn btn-outline-info' DataId=" + result[i]._id + ">Update</button><button class='btn btn-outline-danger ' id='deleteBtn'>Delete</button></td></tr>" + "<br>")
-    }
-
-    var data = []
     function retrieveAll() {
         $.ajax({
             url: '/item/retrieve/all',
@@ -137,6 +137,7 @@ $(document).ready(function () {
 
 
     $("#addItems").on('click', function () {
+        $("#book").hide();
         $.ajax({
             url: 'item/create',
             type: "PUT",
