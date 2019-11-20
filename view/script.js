@@ -1,22 +1,33 @@
 $(document).ready(function () {
     $('#notavai').hide();
     //  retrieveAll();
-    $('input').val("")
+    $('input').val("");
     var id;
     $("#book").show();
     $("#formni").hide();
     $("#tableni").hide();
     $("#formUpdate").hide();
+
     $("#createbtn").click(function () {
         $("#book").show();
         $("#formni").hide();
         // $("#tableni").hide();
     })
-    $("#viewbtn").click(function () {
-        $("#book").hide();
-        $("#formni").show();
-        $("#tableni").show();
-    })
+    function viewbtn() {
+
+        $("#viewbtn").click(function () {
+            $("#searchNisya").val("");
+            $("#book").hide();
+            // $('thead').show();
+            // $('tbody').show();
+            // // $("#formni").show();
+            $("#tableni").show();
+            // // $('tbody').empty();
+            // retrieveAll();
+            $('#notavai').hide();
+        })
+    }
+    viewbtn();
 
     $("#addItems").click(function () {
         $("#formni").hide();
@@ -26,13 +37,15 @@ $(document).ready(function () {
     $("#cancelbtnborrow").click(function () {
         // alert("mabuhay!")
         location.reload();
-      $('#myModalborrow11').hide();
+        $('#myModalborrow11').hide();
     })
 
     $("#cancelbtn").click(function () {
         $("#formni").hide();
         $("#tableni").hide();
         $('input').val("")
+        $('#notavai').hide();
+
     })
     $("#updateItems").click(function () {
         $("#tableni").hide();
@@ -40,37 +53,40 @@ $(document).ready(function () {
     })
     $('thead').show();
     $('#notavai').hide();
-    function search() {
-        $("#searchNisya").on("keyup", function () {
-            $('thead').hide();
-            $("#book").hide();
-            $("#tableni").show();
-            var value = $(this).val();
-            if (value == "") {
-                $('#notavai').hide();
-                $("#book").show();
-                $("#tableni").hide();
-            }
-            $("tbody tr").each(function () {
-                
-                $row = $(this);
-                var id = $row.find("td").text()
-                if (id.indexOf(value) !== 0) {
-                   
-                    $row.hide();
-    
-                }
-                else {
-                    $('thead').show();
-                    $row.show();
-                }
-            });
-        });
+    // function search() {
+    //     $("#searchNisya").on("keyup", function () {
+    //         $('thead').hide();
+    //         $("#book").hide();
+    //         $("#tableni").show();
+    //         viewbtn();
+    //         var value = $(this).val();
+    //         if (value == "") {
+    //             $('#notavai').hide();
+    //             $("#book").show();
+    //             // $("#tableni").hide();
+    //         }
+    //         $("tbody tr").each(function () {
 
-    }
+    //             $row = $(this);
+    //             var id = $row.find("td").text()
+    //             if (id.indexOf(value) !== 0) {
+
+    //                  $row.hide();
+
+    //             }
+    //             else {
+
+    //                 $('thead').show();
+    //                 $row.show();
+    //             }
+    //         });
+
+    //     });
+
+    // }
 
     retrieveAll();
-    search();
+    // search();
     $('#addItems').prop('disabled', 'disabled');
     $('#Author').prop('disabled', 'disabled');
     $('#Quantity').prop('disabled', 'disabled');
@@ -146,7 +162,6 @@ $(document).ready(function () {
 
 
 
-
     $("#addItems").on('click', function () {
         $("#book").hide();
         $.ajax({
@@ -205,24 +220,28 @@ $(document).ready(function () {
     $(document).on('click', '#borrowBtn', function (e) {
         e.preventDefault(e);
         $("#tableni").hide();
+        $('input').val("");
         id = $(this).attr("DataId");
         retrieveOneItemInTheBorrowModal($(this).attr("DataId") + "")
 
     })
-    var QuantityUpdated ;
+    var QuantityUpdated;
     $("#BorrowItems").click(function () {
         $("#myModalborrow").hide();
         var newId = id;
         borrowQuantity = $('#noofbooks').val()
+        var borrower = $('#Borrower').val()
+
         $.ajax({
             url: '/item/update1/' + newId,
             type: "PUT",
-            data: { id: newId, borrowQuantity: borrowQuantity },
+            data: { id: newId, borrowQuantity: -borrowQuantity, borrower:borrower },
             success: function (result) {
+                alert(result.Quantity)
                 console.log(result)
                 var newQuantity = result.Quantity - borrowQuantity;
                 console.log(newQuantity)
-                $("#" + result._id + 'a').html(newQuantity);
+                $("#" + result._id + 'a').html(result.Quantity);
                 QuantityUpdated = newQuantity;
                 $("#tableni").show();
             },
@@ -231,6 +250,8 @@ $(document).ready(function () {
             }
 
         })
+        $('input').val("");
+
     })
 
     //ajax for delete button
@@ -256,36 +277,38 @@ $(document).ready(function () {
         })
     }))
 
-    // searching in the search bar
+    // // searching in the search bar
     $("#btnsearch").on('click', function () {
-      
-        console.log(id)
+
+        // console.log(id)
         var x = $('#searchNisya').val();
-        console.log(x);
+
+        // console.log(x);
         $.ajax({
             url: '/items/search',
             type: "GET",
             data: JSON.stringify({ x: x }),
+
             success: function (response) {
                 for (i = 0; i < response.length; i++) {
-                    console.log(response[i].item)
-                    if (response[i].item == x) {
+                    console.log(response[i].item == x)
 
-                        $('tbody').append("<tr id=" + response[i]._id + "  ><td>" + response[i].item + "</td><td>" + response[i].Author + "</td><td>" + response[i].Quantity + "</td><td><button  data-toggle='modal' data-target='#myModalupdate' class='btn btn-outline-info' DataId=" + response[i]._id + ">Update</button><button class='btn btn-outline-danger ' id='deleteBtn'>Delete</button></td></tr>" + "<br>")
+                    if (response[i].item == x) {   
+                        swal("Book is available!", "You clicked the button!", "success");
+                        break;
+                    } else {
+                        swal("Book is not available!", "You clicked the button!", "error");
                     }
-                    else {
-                        $('thead').hide();
-                        $('#notavai').show();
 
-
-                    }
                 }
 
 
             },
 
         });
+        $("#searchNisya").val("");
+
 
     })
-
+    $('#notavai').hide();
 })

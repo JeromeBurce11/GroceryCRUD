@@ -6,21 +6,21 @@ const Schema = mongoose.Schema;
 var BorrowBooks = new Schema({
     Borrower: {
         type: String,
-        required,
-        unique
+        required: true,
+        unique:true
     },
 
-    item: {
+    BookID: {
+        type: Object,
+        required:true
+    },
+
+    Quantity: {
         type: Number,
-        required
-    },
-
-    Date: {
-        type: String,
-        required,
+        required:true
     }
 
 });
 
 BorrowBooks.plugin(uniqueValidator, { message: 'Error, expected ${item} to be unique.' });
-module.exports = mongoose.model('BorrowBooks', BorrowBooks);
+module.exports = mongoose.model('BorrowBook', BorrowBooks);
