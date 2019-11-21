@@ -6,7 +6,6 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var Item = require('./item')
 var borrowbooks = require('./BorrowBooks')
-var a;
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(bodyParser.json())
@@ -62,6 +61,15 @@ app.get('/', function (req, res) {
 
 app.get('/item/retrieve/all', function (req, res) {
     Item.find(req.body, function (err, item) {
+        if (err) {
+            console.log('err')
+        } else {
+            res.json(item)
+        }
+    })
+})
+app.get('/borrower/retrieve/all', function (req, res) {    
+    borrowbooks.find(req.body, function (err, item) {
         if (err) {
             console.log('err')
         } else {
@@ -126,7 +134,8 @@ app.put('/item/update1/:id', function (req, res) {
     let data = {
         BookID: req.body.id,
         Borrower: req.body.borrower,
-        Quantity: (req.body.borrowQuantity * -1)
+        Quantity: (req.body.borrowQuantity * -1),
+        book: req.body.book
 
     };
     async function update (){

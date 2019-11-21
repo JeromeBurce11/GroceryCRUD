@@ -50,6 +50,12 @@
                     </div>
                 </div>
                 <li class="nav-item active">
+                    <div class="container">
+                        <button class="btn btn-outline-info btn-lg" id="listofborrowerbtn"
+                            type="button">View Borrowers</button><br>
+                    </div>
+                </li>
+                <li class="nav-item active">
                         <div class="container">
                             <button class="btn btn-outline-info btn-lg" id="viewbtn"
                                 type="button">View Books</button><br>
@@ -91,11 +97,32 @@
                             </center>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="itemtbody">
                     </tbody>
                 </table>
             </div>
-        </div><br><br><br>
+        </div>
+        <div id="Borrowerstable">
+            <br><br>
+            </form>
+            <div class="container">
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <center>
+                                <th>Name of the borrower</th>
+                                <th>Book</th>
+                                <th>Quantity</th>
+                                <th>Action</th>
+                            </center>
+                        </tr>
+                    </thead>
+                    <tbody id="borrowertbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br><br><br>
         <!-- <img id="notavai" src="notavai.jpeg" alt=""> -->
         <div class="container">
             <div class="modal" id="myModal">

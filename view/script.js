@@ -7,6 +7,7 @@ $(document).ready(function () {
     $("#formni").hide();
     $("#tableni").hide();
     $("#formUpdate").hide();
+    $('#Borrowerstable').hide();
 
     $("#createbtn").click(function () {
         $("#book").show();
@@ -25,10 +26,19 @@ $(document).ready(function () {
             // // $('tbody').empty();
             // retrieveAll();
             $('#notavai').hide();
+            $('#Borrowerstable').hide();
+
         })
     }
     viewbtn();
+    $('#listofborrowerbtn').click(function () {
+        $("#book").hide();
+        $('#Borrowerstable').show();
+        $("#tableni").hide();
+        $('#borrowertbody').empty();
+        retrieveAllBorrowers();
 
+    })
     $("#addItems").click(function () {
         $("#formni").hide();
         $("#book").hide();
@@ -116,21 +126,35 @@ $(document).ready(function () {
     })
 
     $('input').val("");
+    //it retrieve all the book items in the table.
     function retrieveAll() {
         $.ajax({
             url: '/item/retrieve/all',
             type: 'get',
             success: function (result) {
                 var item = result
-
                 data = item
                 for (var i = 0; i < item.length; ++i) {
-                    $('tbody').append("<tr id=" + item[i].item + "><td id=" + item[i]._id + 'o' + ">" + item[i].item + "</td><td id=" + item[i]._id + 'b' + ">" + item[i].Author + "</td><td id=" + item[i]._id + 'a' + ">" + item[i].Quantity + "</td><td><button class='btn btn-outline-info ' id='borrowBtn' data-toggle=modal data-target='#myModalborrow' type='button' DataId=" + item[i]._id + ">Borrow </button><button  id='updateBtn' data-toggle='modal' data-target='#myModalupdate' class='btn btn-outline-info'  DataId=" + item[i]._id + " >Update</button><button class='btn btn-outline-danger ' DataId=" + item[i]._id + " id='deleteBtn'>Delete</button></td></tr><br>");
+                    $('#itemtbody').append("<tr id=" + item[i].item + "><td id=" + item[i]._id + 'o' + ">" + item[i].item + "</td><td id=" + item[i]._id + 'b' + ">" + item[i].Author + "</td><td id=" + item[i]._id + 'a' + ">" + item[i].Quantity + "</td><td><button class='btn btn-outline-info ' id='borrowBtn' data-toggle=modal data-target='#myModalborrow' type='button' DataId=" + item[i]._id + ">Borrow </button><button  id='updateBtn' data-toggle='modal' data-target='#myModalupdate' class='btn btn-outline-info'  DataId=" + item[i]._id + " >Update</button><button class='btn btn-outline-danger ' DataId=" + item[i]._id + " id='deleteBtn'>Delete</button></td></tr><br>");
                 }
             }
         })
     }
-
+    
+    function retrieveAllBorrowers() {
+        $.ajax({
+            url: '/borrower/retrieve/all',
+            type: 'get',
+            success: function (result) {
+                console.log(result)
+                var item = result
+                data = item
+                for (var i = 0; i < item.length; ++i) {
+                    $('#borrowertbody').append("<tr id=" + item[i]._id + "><td id=" + item[i].Borrower + 'o' + ">" + item[i].Borrower + "</td><td id=" + item[i]._id + 'b' + ">" + item[i].book + "</td><td id=" + item[i]._id + 'a' + ">" + item[i].Quantity + "</td><td><button class='btn btn-outline-danger ' DataId=" + item[i]._id + " id='returnBtn'>Return</button></td></tr><br>");
+                }
+            }
+        })
+    }
     //retrieve specific item
     function retrieveOneItem(DataId) {
         $.ajax({
@@ -235,12 +259,13 @@ $(document).ready(function () {
         $.ajax({
             url: '/item/update1/' + newId,
             type: "PUT",
-            data: { id: newId, borrowQuantity: -borrowQuantity, borrower:borrower },
+            data: { id: newId, borrowQuantity: -borrowQuantity, borrower: borrower, book: $('#itemborrowed').val() },
             success: function (result) {
-                alert(result.Quantity)
+                
+                // alert(result.Quantity)
                 console.log(result)
                 var newQuantity = result.Quantity - borrowQuantity;
-                console.log(newQuantity)
+                // console.log(newQuantity)
                 $("#" + result._id + 'a').html(result.Quantity);
                 QuantityUpdated = newQuantity;
                 $("#tableni").show();
@@ -293,7 +318,7 @@ $(document).ready(function () {
                 for (i = 0; i < response.length; i++) {
                     console.log(response[i].item == x)
 
-                    if (response[i].item == x) {   
+                    if (response[i].item == x) {
                         swal("Book is available!", "You clicked the button!", "success");
                         break;
                     } else {

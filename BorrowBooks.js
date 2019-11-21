@@ -18,6 +18,11 @@ var BorrowBooks = new Schema({
     Quantity: {
         type: Number,
         required:true
+    },
+
+    book: {
+        type: String,
+        required: true
     }
 
 });
