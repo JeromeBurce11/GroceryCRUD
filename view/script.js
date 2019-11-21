@@ -185,6 +185,7 @@ $(document).ready(function () {
     }
 
 
+    
 
     $("#addItems").on('click', function () {
         $("#book").hide();
@@ -260,6 +261,32 @@ $(document).ready(function () {
             url: '/item/update1/' + newId,
             type: "PUT",
             data: { id: newId, borrowQuantity: -borrowQuantity, borrower: borrower, book: $('#itemborrowed').val() },
+            success: function (result) {
+                
+                // alert(result.Quantity)
+                console.log(result)
+                var newQuantity = result.Quantity - borrowQuantity;
+                // console.log(newQuantity)
+                $("#" + result._id + 'a').html(result.Quantity);
+                QuantityUpdated = newQuantity;
+                $("#tableni").show();
+            },
+            error: function (e) {
+                console.error(e)
+            }
+
+        })
+        $('input').val("");
+
+    })
+
+    $("#returnBtn").click(function () {
+        var newId = id;
+
+        $.ajax({
+            url: '/item/return/' + newId,
+            type: "PUT",
+            data: { id: newId, Quantity:Quantity },
             success: function (result) {
                 
                 // alert(result.Quantity)

@@ -209,7 +209,16 @@ app.put('/item/update/:id', function (req, res) {
             });
         });
 })
-
+app.put('/item/return',function(req,res){
+    console.log(req.body)
+    // borrowbooks.findOneAndDelete({ _id: req.body.id }, function (err, data) {
+    //     if (err) return console.log(err);
+    //     const response = {
+    //         message: "Successfully deleted",
+    //     };
+    //     return res.status(200).send(response);
+    // })
+})
 app.delete('/item/delete', function (req, res) {
     console.log(req.body);
     Item.findOneAndDelete({ _id: req.body.id }, function (err, data) {
