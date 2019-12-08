@@ -14,17 +14,16 @@ $(document).ready(function () {
         $("#formni").hide();
         // $("#tableni").hide();
     })
+
     function viewbtn() {
 
         $("#viewbtn").click(function () {
             $("#searchNisya").val("");
             $("#book").hide();
-            // $('thead').show();
-            // $('tbody').show();
-            // // $("#formni").show();
+
             $("#tableni").show();
-            // // $('tbody').empty();
-            // retrieveAll();
+            $('tbody').empty();
+            retrieveAll();
             $('#notavai').hide();
             $('#Borrowerstable').hide();
 
@@ -63,40 +62,40 @@ $(document).ready(function () {
     })
     $('thead').show();
     $('#notavai').hide();
-    // function search() {
-    //     $("#searchNisya").on("keyup", function () {
-    //         $('thead').hide();
-    //         $("#book").hide();
-    //         $("#tableni").show();
-    //         viewbtn();
-    //         var value = $(this).val();
-    //         if (value == "") {
-    //             $('#notavai').hide();
-    //             $("#book").show();
-    //             // $("#tableni").hide();
-    //         }
-    //         $("tbody tr").each(function () {
 
-    //             $row = $(this);
-    //             var id = $row.find("td").text()
-    //             if (id.indexOf(value) !== 0) {
+    function search() {
+        $("#searchNisya").on("keyup", function () {
+            $('thead').hide();
+            $("#book").hide();
+            $("#tableni").show();
+            viewbtn();
+            var value = $(this).val();
+            if (value == "") {
+                $('#notavai').hide();
+                $("#book").show();
+                // $("#tableni").hide();
+            }
+            $("tbody tr").each(function () {
 
-    //                  $row.hide();
+                $row = $(this);
+                var id = $row.find("td").text()
+                if (id.indexOf(value) !== 0) {
 
-    //             }
-    //             else {
+                    $row.hide();
 
-    //                 $('thead').show();
-    //                 $row.show();
-    //             }
-    //         });
+                } else {
 
-    //     });
+                    $('thead').show();
+                    $row.show();
+                }
+            });
 
-    // }
+        });
+
+    }
 
     retrieveAll();
-    // search();
+    search();
     $('#addItems').prop('disabled', 'disabled');
     $('#Author').prop('disabled', 'disabled');
     $('#Quantity').prop('disabled', 'disabled');
@@ -140,13 +139,13 @@ $(document).ready(function () {
             }
         })
     }
-    
+
     function retrieveAllBorrowers() {
         $.ajax({
             url: '/borrower/retrieve/all',
             type: 'get',
             success: function (result) {
-                console.log(result)
+                // console.log(result)
                 var item = result
                 data = item
                 for (var i = 0; i < item.length; ++i) {
@@ -154,6 +153,7 @@ $(document).ready(function () {
                 }
             }
         })
+
     }
     //retrieve specific item
     function retrieveOneItem(DataId) {
@@ -170,6 +170,7 @@ $(document).ready(function () {
             }
         })
     }
+
     function retrieveOneItemInTheBorrowModal(DataId) {
         $.ajax({
             url: '/item/retrieve/' + DataId + '',
@@ -185,14 +186,18 @@ $(document).ready(function () {
     }
 
 
-    
+
 
     $("#addItems").on('click', function () {
         $("#book").hide();
         $.ajax({
             url: 'item/create',
             type: "PUT",
-            data: { item: $('#item').val(), Author: $('#Author').val(), Quantity: $('#Quantity').val() },
+            data: {
+                item: $('#item').val(),
+                Author: $('#Author').val(),
+                Quantity: $('#Quantity').val()
+            },
             success: function (result) {
                 $('tbody').empty();
                 retrieveAll();
@@ -217,7 +222,6 @@ $(document).ready(function () {
     $(document).on('click', '#updateItems', function (e) {
         e.preventDefault(e);
         $("#formUpdate").hide();
-
     })
 
     $("#updateItems").click(function () {
@@ -225,7 +229,13 @@ $(document).ready(function () {
         $.ajax({
             url: '/item/update/' + newId,
             type: "PUT",
-            data: { id: newId, item: $('#updateitem').val(), Author: $('#updateAuthor').val(), Quantity: $('#updateQuantity').val(), Priority: $('#updatePriority').val() },
+            data: {
+                id: newId,
+                item: $('#updateitem').val(),
+                Author: $('#updateAuthor').val(),
+                Quantity: $('#updateQuantity').val(),
+                Priority: $('#updatePriority').val()
+            },
             success: function (result) {
 
                 $("#" + result._id + 'o').html(result.item);
@@ -260,9 +270,14 @@ $(document).ready(function () {
         $.ajax({
             url: '/item/update1/' + newId,
             type: "PUT",
-            data: { id: newId, borrowQuantity: -borrowQuantity, borrower: borrower, book: $('#itemborrowed').val() },
+            data: {
+                id: newId,
+                borrowQuantity: -borrowQuantity,
+                borrower: borrower,
+                book: $('#itemborrowed').val()
+            },
             success: function (result) {
-                
+
                 // alert(result.Quantity)
                 console.log(result)
                 var newQuantity = result.Quantity - borrowQuantity;
@@ -274,49 +289,103 @@ $(document).ready(function () {
             error: function (e) {
                 console.error(e)
             }
-
         })
         $('input').val("");
 
     })
 
-    $("#returnBtn").click(function () {
-        var newId = id;
-
+    //saving the borrower in the history!
+    // $(document).on('click', '#returnBtn', function () {
+    //     id = $(this).attr("DataId");
+    //     $.ajax({
+    //         url: `/borrower/history/ `+id,
+    //         data: 
+    //         type: 'post',
+    //         success: function (result) {
+    //             alert(result)
+    //         },
+    //         error: function (e) {
+    //             console.error(e)
+    //         }
+    //     })
+    // })
+    //returning the books in the library...
+    $(document).on('click', '#returnBtn', function () {
+        id = $(this).attr("DataId");
         $.ajax({
-            url: '/item/return/' + newId,
-            type: "PUT",
-            data: { id: newId, Quantity:Quantity },
+            url: '/item/return/' + id,
+            type: 'get',
             success: function (result) {
-                
-                // alert(result.Quantity)
-                console.log(result)
-                var newQuantity = result.Quantity - borrowQuantity;
-                // console.log(newQuantity)
-                $("#" + result._id + 'a').html(result.Quantity);
-                QuantityUpdated = newQuantity;
-                $("#tableni").show();
+                alert(JSON.stringify(result))
+                // var data = result
+                $.ajax({
+                    url: '/item/updateReturnBook/' + result.BookID,
+                    type: "PUT",
+                    data: {
+                        id: result.BookID,
+                        returnborrowQuantity: +result.Quantity,
+                    },
+                    success: function (result) {
+                        // console.log(id)
+                        // alert(JSON.stringify(result))
+                        // console.log(JSON.stringify(result))
+                        console.log(result)
+                        swal("Successfully return!", "You clicked the button!", "success");
+                        $(`table #${id}`).remove();
+                        // window.location.reload();
+                        $('tbody').empty();
+                        retrieveAllBorrowers();
+                    },
+                    error: function (e) {
+                        console.error(e)
+                    },
+                })
+                $('input').val("");
             },
             error: function (e) {
                 console.error(e)
             }
-
         })
-        $('input').val("");
+
 
     })
 
-    //ajax for delete button
+    //ajax for delete 
+
+
     $(document).on('click', "#deleteBtn", (function () {
-        var id = $(this).attr("Dataid")
+        // Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: "You won't be able to revert this!",
+        //     icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'Yes, delete it!'
+        // }).then(function (result) {
+        //     if (result.value) {
+        //         deleteItem();
+        //         Swal.fire(
+        //             'Deleted!',
+        //             'Your file has been deleted.',
+        //             'success'
+        //         );
+        //     }
+        // });
+        // deleteItem();
+
+        // function deleteItem() {
+        var id = $(this).attr("Dataid");
         $.ajax({
             url: '/item/delete',
             type: 'Delete',
             dataType: 'JSON',
-            data: { id: id },
+            data: {
+                id: id
+            },
 
             success: function (result) {
-                console.log(result)
+                console.log(result);
                 swal("Successfully deleted!", "You clicked the button!", "success");
                 $('#' + id).remove();
                 $('tbody').empty();
@@ -324,10 +393,11 @@ $(document).ready(function () {
             },
             error: function (err) {
                 // alert(err)
-                console.log(err)
+                console.log(err);
             },
-        })
-    }))
+        });
+        // }
+    }));
 
     // // searching in the search bar
     $("#btnsearch").on('click', function () {
@@ -339,11 +409,13 @@ $(document).ready(function () {
         $.ajax({
             url: '/items/search',
             type: "GET",
-            data: JSON.stringify({ x: x }),
+            data: JSON.stringify({
+                x: x
+            }),
 
             success: function (response) {
                 for (i = 0; i < response.length; i++) {
-                    console.log(response[i].item == x)
+                    console.log(response[i].item == x);
 
                     if (response[i].item == x) {
                         swal("Book is available!", "You clicked the button!", "success");
@@ -361,6 +433,6 @@ $(document).ready(function () {
         $("#searchNisya").val("");
 
 
-    })
+    });
     $('#notavai').hide();
-})
+});

@@ -1,95 +1,100 @@
-var app = require('express')();
-var express = require('express');
-var http = require("http").Server(app)
+var app = require("express")();
+var express = require("express");
+var http = require("http").Server(app);
 var port = process.env.PORT || 8000;
-var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
-var Item = require('./item')
-var borrowbooks = require('./BorrowBooks')
-app.use(bodyParser.urlencoded({ extended: true }))
+var mongoose = require("mongoose");
+var bodyParser = require("body-parser");
+var Item = require("./item");
+var borrowbooks = require("./BorrowBooks");
+var borrowerHistory = require("./BorrowerHistory");
 
-app.use(bodyParser.json())
-app.use(express.static('view'));
-app.use(express.static('public'));
-app.set('view engine', 'ejs');
+app.use(
+    bodyParser.urlencoded({
+        extended: true
+    })
+);
 
+app.use(bodyParser.json());
+app.use(express.static("view"));
+app.use(express.static("public"));
+app.set("view engine", "ejs");
 
-app.put('/item/create', function (req, res) {
-    let test = new Item(req.body)
+app.put("/item/create", function (req, res) {
+    let test = new Item(req.body);
     console.log(req.body);
     test.save(function (err, data) {
         if (err) {
-
-            console.log(err)
+            console.log(err);
         } else {
-            console.log(data + 'saved')
+            console.log(data + "saved");
         }
         Item.find(req.body, function (err, item) {
             if (err) {
-                console.log('err')
+                console.log("err");
             } else {
-                res.json(item)
+                res.json(item);
             }
-        })
-    })
-})
-
-app.put('/item/borrowbooks', function (req, res) {
-    console.log('borrow')
-    let test = new Item(req.body)
-    console.log(req.body);
-    test.save(function (err, data) {
-        if (err) {
-            console.log(err)
-        } else {
-            console.log(data + 'saved')
-        }
-        Item.find(req.body, function (err, item) {
-            if (err) {
-                console.log('err')
-            } else {
-                res.json(item)
-            }
-        })
-    })
-})
-
-
-app.get('/', function (req, res) {
-    res.sendFile(__dirname + "/view/index.html");
-})
-
-app.get('/item/retrieve/all', function (req, res) {
-    Item.find(req.body, function (err, item) {
-        if (err) {
-            console.log('err')
-        } else {
-            res.json(item)
-        }
-    })
-})
-app.get('/borrower/retrieve/all', function (req, res) {    
-    borrowbooks.find(req.body, function (err, item) {
-        if (err) {
-            console.log('err')
-        } else {
-            res.json(item)
-        }
-    })
-})
-app.all('/items/search', function (req, res) {
-    Item.find(req.body, function (err, item) {
-        if (err) {
-            console.log('err')
-        } else {
-            res.send(item)
-            console.log(item)
-        }
-    })
+        });
+    });
 });
 
-app.get('/item/retrieve/:id', function (req, res) {
-    Item.findById({ _id: req.params.id })
+app.put("/item/borrowbooks", function (req, res) {
+    console.log("borrow");
+    let test = new Item(req.body);
+    console.log(req.body);
+    test.save(function (err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(data + "saved");
+        }
+        Item.find(req.body, function (err, item) {
+            if (err) {
+                console.log("err");
+            } else {
+                res.json(item);
+            }
+        });
+    });
+});
+
+app.get("/", function (req, res) {
+    res.sendFile(__dirname + "/view/index.html");
+});
+
+app.get("/item/retrieve/all", function (req, res) {
+    Item.find(req.body, function (err, item) {
+        if (err) {
+            console.log("err");
+        } else {
+            res.json(item);
+        }
+    });
+});
+app.get("/borrower/retrieve/all", function (req, res) {
+    borrowbooks.find(req.body, function (err, item) {
+        if (err) {
+            console.log("err");
+        } else {
+            res.json(item);
+        }
+    });
+});
+app.all("/items/search", function (req, res) {
+    Item.find(req.body, function (err, item) {
+        if (err) {
+            console.log("err");
+        } else {
+            res.send(item);
+            console.log(item);
+        }
+    });
+});
+
+app.get("/item/retrieve/:id", function (req, res) {
+    Item.findById({
+            _id: req.params.id
+        })
         .then(items => {
             if (!items) {
                 return res.status(404).send({
@@ -97,8 +102,9 @@ app.get('/item/retrieve/:id', function (req, res) {
                 });
             }
             res.send(items);
-        }).catch(err => {
-            if (err.kind === 'ObjectId') {
+        })
+        .catch(err => {
+            if (err.kind === "ObjectId") {
                 return res.status(404).send({
                     message: "items not found with id " + req.params.id
                 });
@@ -107,89 +113,99 @@ app.get('/item/retrieve/:id', function (req, res) {
                 message: "Error retrieving items with id " + req.params.id
             });
         });
-})
+});
 
 function borrow(data) {
     return new Promise(function (resolve, reject) {
-      let book = new borrowbooks(data)
-      book.save()
-      .then((doc) => {
-         if(doc){
-            console.log('saved')
-            resolve({data:doc});
-         }
-         else{
-             resolve({data:'not found'})
-         }
-      })
-      .catch(err => {
-          console.log(err)
-          reject(err);
-      })
-    })
-  }
-  
-app.put('/item/update1/:id', function (req, res) {
-    
+        let book = new borrowbooks(data);
+        book
+            .save()
+            .then(doc => {
+                if (doc) {
+                    console.log("saved");
+                    resolve({
+                        data: doc
+                    });
+                } else {
+                    resolve({
+                        data: "not found"
+                    });
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                reject(err);
+            });
+    });
+}
+
+app.put("/item/update1/:id", function (req, res) {
     let data = {
         BookID: req.body.id,
         Borrower: req.body.borrower,
-        Quantity: (req.body.borrowQuantity * -1),
+        Quantity: req.body.borrowQuantity * -1,
         book: req.body.book
-
     };
-    async function update (){
-        try{
+    async function update() {
+        try {
             var result = await borrow(data);
-            console.log('result')
-            console.log(result)
-            if(result.data != 'not found'){
-                Item.findOneAndUpdate({ _id: req.body.id }, { $inc: { Quantity: req.body.borrowQuantity } }, {
-                    new: true,
-                    upsert: true
-                })
-                .then(items1 => {
-                    console.log( )
-                    if (!items1) {
-                        return res.status(404).send({
-                            message: "items not found with id " + req.params.id
-                        });
-                    }
+            console.log("result");
+            console.log(result);
+            if (result.data != "not found") {
+                Item.findOneAndUpdate({
+                        _id: req.body.id
+                    }, {
+                        $inc: {
+                            Quantity: req.body.borrowQuantity
+                        }
+                    }, {
+                        new: true,
+                        upsert: true
+                    })
+                    .then(items1 => {
+                        console.log();
+                        if (!items1) {
+                            return res.status(404).send({
+                                message: "items not found with id " + req.params.id
+                            });
+                        }
                         // console.log(items1)
-                    res.json(items1);
+                        res.json(items1);
                         // console.log(items)
-                }).catch(err => {
-                    if (err.kind === 'ObjectId') {
-                        return res.status(404).send({
-                            message: "items not found with id " + req.params.id
-                         });
-                    }
-                    return res.status(500).send({
-                         message: "Error retrieving items with id " + req.params.id
+                    })
+                    .catch(err => {
+                        if (err.kind === "ObjectId") {
+                            return res.status(404).send({
+                                message: "items not found with id " + req.params.id
+                            });
+                        }
+                        return res.status(500).send({
+                            message: "Error retrieving items with id " + req.params.id
+                        });
                     });
-                 });
-
             }
-
-        }catch(err) {
+        } catch (err) {
             console.log("Unexpected error occured!!!!");
             res.status(500).json({
-              message: "Unexpected error occured!"
-            })
+                message: "Unexpected error occured!"
+            });
         }
     }
-    update()
+    update();
+});
 
-   
-})
-
-app.put('/item/update/:id', function (req, res) {
+app.put("/item/update/:id", function (req, res) {
     a = req.body.Quantity;
-    Item.findOneAndUpdate({ _id: req.body.id }, { item: req.body.item, Author: req.body.Author, Quantity: req.body.Quantity }, {
-        new: true,
-        upsert: true
-    })
-
+    Item.findOneAndUpdate({
+            _id: req.body.id
+        }, {
+            item: req.body.item,
+            Author: req.body.Author,
+            Quantity: req.body.Quantity
+        }, {
+            new: true,
+            upsert: true
+        })
         .then(items => {
             if (!items) {
                 return res.status(404).send({
@@ -198,8 +214,9 @@ app.put('/item/update/:id', function (req, res) {
             }
             res.json(items);
             // console.log(items)
-        }).catch(err => {
-            if (err.kind === 'ObjectId') {
+        })
+        .catch(err => {
+            if (err.kind === "ObjectId") {
                 return res.status(404).send({
                     message: "items not found with id " + req.params.id
                 });
@@ -208,28 +225,121 @@ app.put('/item/update/:id', function (req, res) {
                 message: "Error retrieving items with id " + req.params.id
             });
         });
-})
-app.put('/item/return',function(req,res){
-    console.log(req.body)
-    // borrowbooks.findOneAndDelete({ _id: req.body.id }, function (err, data) {
-    //     if (err) return console.log(err);
-    //     const response = {
-    //         message: "Successfully deleted",
-    //     };
-    //     return res.status(200).send(response);
-    // })
-})
-app.delete('/item/delete', function (req, res) {
+});
+//saving the borrower in the history!
+// app.post('/borrower/history/:id', function (req, res) {
+//     borrowbooks.findById({
+//         _id: req.params.id
+//     }, function (err, data) {
+//         if (err) return console.log(err);
+//         console.log(data)
+//         // save borrower to borrowerHistory database
+//         var borroweLogs = new borrowerHistory(data)
+//         borroweLogs.save(function (err) {
+//             if (err) return console.error(err);
+//         });
+//         return res.status(200).send(data);
+//     });
+// })
+// app.post('/borrower/history', function (req, res) {
+
+//     console.log(req.body.Borrower + " test")
+//     var item = JSON.stringify(req.body)
+//     // console.log(item + " burce")
+//     var data = {
+//         Borrower: req.body.Borrower,
+//         BookID: req.body.BookID,
+//         Quantity: req.body.Quantity,
+//         book: req.body.book
+//     }
+//     // console.log(JSON.stringify(data) + " tibs")
+//     var borroweLogs = new borrowerHistory(req.body)
+//     borroweLogs.save(function (err, data) {
+//         // console.log(data + " test")
+//         if (err) return console.error(err);
+//         return res.status(200).send(data);
+//     });
+// });
+
+app.get("/item/return/:id", function (req, res) {
+    console.log(req.params)
+    borrowbooks.findOneAndDelete({
+            _id: req.params.id
+        },
+        function (err, data) {
+            if (err) return console.log(err);
+            const response = {
+                message: "Successfully deleted"
+            };
+            return res.status(200).send(data);
+        }
+    );
+});
+// app.get("/item/return/:id", function (req, res) {
+//     console.log(req.body);
+//     borrowbooks.findOneAndDelete({
+//             _id: req.params.id
+//         },
+//         function (err, data) {
+//             if (err) return console.log(err);
+//             const response = {
+//                 message: "Successfully deleted"
+//             };
+//             return res.status(200).send(response);
+//         }
+//     );
+
+
+// });
+app.put("/item/updateReturnBook/:id", function (req, res) {
+    // console.log(req.body.returnborrowQuantity)
+    Item.findOneAndUpdate({
+            _id: req.body.id
+        }, {
+            $inc: {
+                Quantity: +req.body.returnborrowQuantity
+            }
+        }, {
+            new: true,
+            upsert: true
+        })
+        .then(items1 => {
+            console.log();
+            if (!items1) {
+                return res.status(404).send({
+                    message: "items not found with id " + req.params.id
+                });
+            }
+            // console.log(items1)
+            res.json(items1);
+            // console.log(items)
+        })
+        .catch(err => {
+            if (err.kind === "ObjectId") {
+                return res.status(404).send({
+                    message: "items not found with id " + req.params.id
+                });
+            }
+            return res.status(500).send({
+                message: "Error retrieving items with id " + req.params.id
+            });
+        });
+});
+app.delete("/item/delete", function (req, res) {
     console.log(req.body);
-    Item.findOneAndDelete({ _id: req.body.id }, function (err, data) {
-        if (err) return console.log(err);
-        const response = {
-            message: "Successfully deleted",
-        };
-        return res.status(200).send(response);
-    })
-})
+    Item.findOneAndDelete({
+            _id: req.body.id
+        },
+        function (err, data) {
+            if (err) return console.log(err);
+            const response = {
+                message: "Successfully deleted"
+            };
+            return res.status(200).send(response);
+        }
+    );
+});
 
 http.listen(port, function () {
-    console.log('listening on *:' + port);
+    console.log("listening on *:" + port);
 });
