@@ -47,12 +47,13 @@
      $("#cancelbtnborrow").click(function () {
          // alert("mabuhay!")
          location.reload();
+         $("#myModalupdate").hide();
          $('#myModalborrow11').hide();
      })
-
-     $("#cancelbtn").click(function () {
+     $(document).on('click', '#cancelbtn', function () {
+         $('#myModalupdate').modal('hide');
          $("#formni").hide();
-         $("#tableni").hide();
+         $("#tableni").show();
          $('input').val("")
          $('#notavai').hide();
 
