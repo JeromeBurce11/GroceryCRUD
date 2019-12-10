@@ -21,7 +21,9 @@ app.set("view engine", "ejs");
 app.put("/item/create", function (req, res) {
     let test = new Item(req.body);
     console.log(req.body);
+    
     test.save(function (err, data) {
+        console.log(data)
         if (err) {
             console.log(err);
         } else {
@@ -199,6 +201,7 @@ app.put("/item/update/:id", function (req, res) {
             _id: req.body.id
         }, {
             item: req.body.item,
+            Volume: req.body.Volume,
             Author: req.body.Author,
             Quantity: req.body.Quantity
         }, {

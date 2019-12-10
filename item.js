@@ -13,6 +13,10 @@ var Item = new Schema({
         require: true,
         unique: true
     },
+    Volume:{
+        type:String,
+        require:true
+    },
     Author: {
         type: String,
         require: true
