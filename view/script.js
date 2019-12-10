@@ -28,6 +28,7 @@ $(document).ready(function () {
             // retrieveAll();
             $('#notavai').hide();
             $('#Borrowerstable').hide();
+            // window.location.reload();
 
         })
     }
@@ -276,34 +277,7 @@ $(document).ready(function () {
         })
         $('input').val("");
     }
-    //  function updateanitem(){
-    //  $("#updateItems").click(function () {
-    //      var newId = id;
-    //      $.ajax({
-    //          url: '/item/update/' + newId,
-    //          type: "PUT",
-    //          data: {
-    //              id: newId,
-    //              item: $('#updateitem').val(),
-    //              Author: $('#updateAuthor').val(),
-    //              Quantity: $('#updateQuantity').val(),
-    //              Priority: $('#updatePriority').val()
-    //          },
-    //          success: function (result) {
 
-    //              $("#" + result._id + 'o').html(result.item);
-    //              $("#" + result._id + 'b').html(result.Author);
-    //              $("#" + result._id + 'a').html(result.Quantity);
-
-    //              $("#tableni").show();
-    //          },
-    //          error: function (e) {
-    //              console.error(e)
-    //          }
-
-    //      })
-    //  })
-    // }
     // items show in the modal of the borrower template 
 
     $(document).on('click', '#borrowBtn', function (e) {
@@ -331,7 +305,6 @@ $(document).ready(function () {
                 book: $('#itemborrowed').val()
             },
             success: function (result) {
-
                 // alert(result.Quantity)
                 console.log(result)
                 var newQuantity = result.Quantity - borrowQuantity;
@@ -349,20 +322,19 @@ $(document).ready(function () {
     })
 
     //saving the borrower in the history!
-    // $(document).on('click', '#returnBtn', function () {
-    //     id = $(this).attr("DataId");
-    //     $.ajax({
-    //         url: `/borrower/history/ `+id,
-    //         data: 
-    //         type: 'post',
-    //         success: function (result) {
-    //             alert(result)
-    //         },
-    //         error: function (e) {
-    //             console.error(e)
-    //         }
-    //     })
-    // })
+    $(document).on('click', '#returnBtn', function () {
+        id = $(this).attr("DataId");
+        $.ajax({
+            url: `/borrower/history/ `+id, 
+            type: 'post',
+            success: function (result) {
+                alert(result)
+            },
+            error: function (e) {
+                console.error(e)
+            }
+        })
+    })
     //returning the books in the library...
     $(document).on('click', '#returnBtn', function () {
         id = $(this).attr("DataId");

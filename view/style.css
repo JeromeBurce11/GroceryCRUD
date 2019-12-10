@@ -26,7 +26,7 @@ input{
     background: -webkit-linear-gradient(to right, #ffd89b, #19547b);
     background: linear-gradient(to right, #ffd89b, #19547b);
     min-height: 100vh;
-    color:white;
+    /* color:white; */
   }
   
   .form-control::placeholder {

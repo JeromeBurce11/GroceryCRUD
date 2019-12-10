@@ -229,20 +229,20 @@ app.put("/item/update/:id", function (req, res) {
         });
 });
 //saving the borrower in the history!
-// app.post('/borrower/history/:id', function (req, res) {
-//     borrowbooks.findById({
-//         _id: req.params.id
-//     }, function (err, data) {
-//         if (err) return console.log(err);
-//         console.log(data)
-//         // save borrower to borrowerHistory database
-//         var borroweLogs = new borrowerHistory(data)
-//         borroweLogs.save(function (err) {
-//             if (err) return console.error(err);
-//         });
-//         return res.status(200).send(data);
-//     });
-// })
+app.post('/borrower/history/:id', function (req, res) {
+    borrowbooks.findById({
+        _id: req.params.id
+    }, function (err, data) {
+        if (err) return console.log(err);
+        console.log(data)
+        // save borrower to borrowerHistory database
+        var borrowerLogs = new borrowerHistory(data)
+        borrowerLogs.save(function (err) {
+            if (err) return console.error(err);
+        });
+       s;
+    });
+})
 // app.post('/borrower/history', function (req, res) {
 
 //     console.log(req.body.Borrower + " test")
@@ -273,9 +273,12 @@ app.get("/item/return/:id", function (req, res) {
             const response = {
                 message: "Successfully deleted"
             };
+            
             return res.status(200).send(data);
+            
         }
     );
+    
 });
 // app.get("/item/return/:id", function (req, res) {
 //     console.log(req.body);
