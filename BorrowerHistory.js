@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 
 
 var BorrowHistory = new Schema({
-    _id: {
-        type: String,
+    UserID: {
+        type: Object,
         required: true,
     },
     Borrower: {

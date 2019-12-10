@@ -20,7 +20,7 @@ $(document).ready(function () {
     function viewbtn() {
 
         $("#viewbtn").click(function () {
-             $(".table").dataTable();
+            $(".table").dataTable();
             $("#searchNisya").val("");
             $("#book").hide();
             $("#tableni").show();
@@ -81,17 +81,28 @@ $(document).ready(function () {
                 $("#book").show();
                 // $("#tableni").hide();
             }
-            $("tbody tr").each(function () {
+            // $('#notavai').hide();
 
+            $("tbody tr").each(function () {
                 $row = $(this);
                 var id = $row.find("td").text()
-                if (id.indexOf(value) !== 0) {
 
+                // $('#notavai').show();
+
+                if (id.indexOf(value) == true) {
+
+                    $('#notavai').show();
+
+                }
+                if (id.indexOf(value) !== 0) {
                     $row.hide();
+                    // $('#notavai').hide();
+
 
                 } else {
-
                     $('thead').show();
+
+
                     $row.show();
                 }
             });
@@ -154,6 +165,7 @@ $(document).ready(function () {
                 // console.log(result)
                 var item = result
                 data = item
+
                 for (var i = 0; i < item.length; ++i) {
                     $('#borrowertbody').append("<tr id=" + item[i]._id + "><td id=" + item[i].Borrower + 'o' + ">" + item[i].Borrower + "</td><td id=" + item[i]._id + 'b' + ">" + item[i].book + "</td><td id=" + item[i]._id + 'a' + ">" + item[i].Quantity + "</td><td><button class='btn btn-outline-danger ' DataId=" + item[i]._id + " id='returnBtn'>Return</button></td></tr><br>");
                 }
@@ -170,268 +182,282 @@ $(document).ready(function () {
             success: function (result) {
                 $('#itemborrowed').val(result.item)
                 $('#availableitem').val((result.Quantity).toString())
-            },
-            error: function (e) {
-                console.error(e)
-            }
-        })
-    }
-
-
-
-
-    $("#addItems").on('click', function () {
-        $("#book").hide();
-        $.ajax({
-            url: 'item/create',
-            type: "PUT",
-            data: {
-                item: $('#item').val(),
-                Volume: $("#Volume").val(),
-                Author: $('#Author').val(),
-                Quantity: $('#Quantity').val()
-            },
-            success: function (result) {
-                alert(result)
-                $('tbody').empty();
-                retrieveAll();
-                swal("Successfully added!", "You clicked the button!", "success");
-                $('input').val('');
-            },
-            error: function (e) {
-                console.log(e);
-            }
-        })
-    })
-
-
-    $(document).on('click', '#updateBtn', function (e) {
-        e.preventDefault(e);
-        $("#tableni").hide();
-        $("#myModalupdate").show();
-        id = $(this).attr("DataId");
-        retrieveOneItem($(this).attr("DataId") + "")
-    })
-
-    $(document).on('click', '#updateItems', function (e) {
-        e.preventDefault(e);
-        $("#formUpdate").hide();
-    })
-    //retrieve specific item
-    function retrieveOneItem(DataId) {
-        $.ajax({
-            url: '/item/retrieve/' + DataId + '',
-            type: 'get',
-            success: function (result) {
-                //  alert("mabuhay!!!")
-                $('#updateitem').val(result.item)
-                $('#updateVolume').val(result.Volume)
-                $('#updateAuthor').val(result.Author)
-                $('#updateQuantity').val(result.Quantity)
-                $("#updateItems").click(function () {
-
-                    if (result.item == $('#updateitem').val() && result.Volume == $('#updateVolume').val() && $('#updateAuthor').val() == result.Author && result.Quantity == $('#updateQuantity').val()) {
-                        swal("The book is not updated!", "You clicked the button!", "info");
-                    }
-                    else if (result.item == $('#updateitem').val() || result.Volume == $('#updateVolume').val() || $('#updateAuthor').val() == result.Author || result.Quantity == $('#updateQuantity').val()) {
-                        swal("The book is not updated!", "You clicked the button!", "info");
-                        $("#tableni").show();
-
-                    }
-                    else if ($('#updateitem').val() == "" || $('#updateVolume').val() == "" || $('#updateAuthor').val() == "" || $('#updateQuantity').val() == "") {
-                        swal("Input fields are required!", "You clicked the button!", "info");
+                $("#BorrowItems").click(function () {
+                    console.log(result.Quantity)
+                    $("#myModalborrow").hide();
+                    var newId = id;
+                    borrowQuantity = $('#noofbooks').val()
+                    var borrower = $('#Borrower').val()
+                    if (borrowQuantity < 1) {
+                        $("#myModalborrow").show();
+                        swal("input must be above 0!", {
+                            icon: "info",
+                        });
+                    } else if (borrowQuantity > result.Quantity) {
+                        swal("input must not above the available number of books!", {
+                            icon: "info",
+                        });
                     } else {
-                        var newId = id;
                         $.ajax({
-                            url: '/item/update/' + newId,
+                            url: '/item/update1/' + newId,
                             type: "PUT",
                             data: {
                                 id: newId,
-                                item: $('#updateitem').val(),
-                                Volume: $('#updateVolume').val(),
-                                Author: $('#updateAuthor').val(),
-                                Quantity: $('#updateQuantity').val(),
-                                Priority: $('#updatePriority').val()
+                                borrowQuantity: -borrowQuantity,
+                                borrower: borrower,
+                                book: $('#itemborrowed').val()
                             },
                             success: function (result) {
-
-                                $("#" + result._id + 'o').html(result.item);
-                                $("#" + result._id + 'v').html(result.Volume);
-                                $("#" + result._id + 'b').html(result.Author);
+                                // alert(result.Quantity)
+                                console.log(result)
+                                var newQuantity = result.Quantity - borrowQuantity;
+                                // console.log(newQuantity)
                                 $("#" + result._id + 'a').html(result.Quantity);
-                                swal("The book is successfully updated!", "You clicked the button!", "success");
-
+                                QuantityUpdated = newQuantity;
                                 $("#tableni").show();
                             },
                             error: function (e) {
                                 console.error(e)
                             }
-
                         })
+                        $('input').val("");
                     }
-                });
-            },
-            error: function (e) {
-                console.error(e)
-            }
-        })
-        $('input').val("");
+                    
+                })
+
+    },
+    error: function (e) {
+        console.error(e)
+    }
+})
     }
 
-    // items show in the modal of the borrower template 
 
-    $(document).on('click', '#borrowBtn', function (e) {
-        e.preventDefault(e);
-        $("#tableni").hide();
-        $('input').val("");
-        id = $(this).attr("DataId");
-        retrieveOneItemInTheBorrowModal($(this).attr("DataId") + "")
 
+
+$("#addItems").on('click', function () {
+    $("#book").hide();
+    $.ajax({
+        url: 'item/create',
+        type: "PUT",
+        data: {
+            item: $('#item').val(),
+            Volume: $("#Volume").val(),
+            Author: $('#Author').val(),
+            Quantity: $('#Quantity').val()
+        },
+        success: function (result) {
+            alert(result)
+            $('tbody').empty();
+            retrieveAll();
+            swal("Successfully added!", "You clicked the button!", "success");
+            $('input').val('');
+        },
+        error: function (e) {
+            console.log(e);
+        }
     })
-    var QuantityUpdated;
-    $("#BorrowItems").click(function () {
-        $("#myModalborrow").hide();
-        var newId = id;
-        borrowQuantity = $('#noofbooks').val()
-        var borrower = $('#Borrower').val()
-
-        $.ajax({
-            url: '/item/update1/' + newId,
-            type: "PUT",
-            data: {
-                id: newId,
-                borrowQuantity: -borrowQuantity,
-                borrower: borrower,
-                book: $('#itemborrowed').val()
-            },
-            success: function (result) {
-                // alert(result.Quantity)
-                console.log(result)
-                var newQuantity = result.Quantity - borrowQuantity;
-                // console.log(newQuantity)
-                $("#" + result._id + 'a').html(result.Quantity);
-                QuantityUpdated = newQuantity;
-                $("#tableni").show();
-            },
-            error: function (e) {
-                console.error(e)
-            }
-        })
-        $('input').val("");
-
-    })
-
-    //saving the borrower in the history!
-    $(document).on('click', '#returnBtn', function () {
-        id = $(this).attr("DataId");
-        $.ajax({
-            url: `/borrower/history/ `+id, 
-            type: 'post',
-            success: function (result) {
-                alert(result)
-            },
-            error: function (e) {
-                console.error(e)
-            }
-        })
-    })
-    //returning the books in the library...
-    $(document).on('click', '#returnBtn', function () {
-        id = $(this).attr("DataId");
-        $.ajax({
-            url: '/item/return/' + id,
-            type: 'get',
-            success: function (result) {
-                alert(JSON.stringify(result))
-                // var data = result
-                $.ajax({
-                    url: '/item/updateReturnBook/' + result.BookID,
-                    type: "PUT",
-                    data: {
-                        id: result.BookID,
-                        returnborrowQuantity: +result.Quantity,
-                    },
-                    success: function (result) {
-                        // console.log(id)
-                        // alert(JSON.stringify(result))
-                        // console.log(JSON.stringify(result))
-                        console.log(result)
-                        swal("Successfully return!", "You clicked the button!", "success");
-                        $(`table #${id}`).remove();
-                        // window.location.reload();
-                        $('tbody').empty();
-                        retrieveAllBorrowers();
-                    },
-                    error: function (e) {
-                        console.error(e)
-                    },
-                })
-                $('input').val("");
-                $('input').val("");
-            },
-            error: function (e) {
-                console.error(e)
-            }
-        })
+})
 
 
-    })
+$(document).on('click', '#updateBtn', function (e) {
+    e.preventDefault(e);
+    $("#tableni").hide();
+    $("#myModalupdate").show();
+    id = $(this).attr("DataId");
+    retrieveOneItem($(this).attr("DataId") + "")
+})
 
-    //ajax for delete 
+$(document).on('click', '#updateItems', function (e) {
+    e.preventDefault(e);
+    $("#formUpdate").hide();
+})
+//retrieve specific item
+function retrieveOneItem(DataId) {
+    $.ajax({
+        url: '/item/retrieve/' + DataId + '',
+        type: 'get',
+        success: function (result) {
+            //  alert("mabuhay!!!")
+            $('#updateitem').val(result.item)
+            $('#updateVolume').val(result.Volume)
+            $('#updateAuthor').val(result.Author)
+            $('#updateQuantity').val(result.Quantity)
+            $("#updateItems").click(function () {
 
+                if (result.item == $('#updateitem').val() && result.Volume == $('#updateVolume').val() && $('#updateAuthor').val() == result.Author && result.Quantity == $('#updateQuantity').val()) {
+                    swal("The book is not updated!", "You clicked the button!", "info");
+                }
+                else if (result.item == $('#updateitem').val() || result.Volume == $('#updateVolume').val() || $('#updateAuthor').val() == result.Author || result.Quantity == $('#updateQuantity').val()) {
+                    swal("The book is not updated!", "You clicked the button!", "info");
+                    $("#tableni").show();
 
-    $(document).on('click', "#deleteBtn", (function () {
-        var id = $(this).attr("Dataid");
-        swal({
-            title: "Are you sure you want to delete this BOOK?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then(function (willDelete) {
-                if (willDelete) {
-                    deleteItem();
-                    swal("The book is remove in the list!", {
-                        icon: "success",
-                    });
+                }
+                else if ($('#updateitem').val() == "" || $('#updateVolume').val() == "" || $('#updateAuthor').val() == "" || $('#updateQuantity').val() == "") {
+                    swal("Input fields are required!", "You clicked the button!", "info");
                 } else {
-                    swal("Book is not deleted!");
+                    var newId = id;
+                    $.ajax({
+                        url: '/item/update/' + newId,
+                        type: "PUT",
+                        data: {
+                            id: newId,
+                            item: $('#updateitem').val(),
+                            Volume: $('#updateVolume').val(),
+                            Author: $('#updateAuthor').val(),
+                            Quantity: $('#updateQuantity').val(),
+                            Priority: $('#updatePriority').val()
+                        },
+                        success: function (result) {
+
+                            $("#" + result._id + 'o').html(result.item);
+                            $("#" + result._id + 'v').html(result.Volume);
+                            $("#" + result._id + 'b').html(result.Author);
+                            $("#" + result._id + 'a').html(result.Quantity);
+                            swal("The book is successfully updated!", "You clicked the button!", "success");
+
+                            $("#tableni").show();
+                        },
+                        error: function (e) {
+                            console.error(e)
+                        }
+
+                    })
                 }
             });
-
-        function deleteItem() {
-
-            $.ajax({
-                url: '/item/delete',
-                type: 'Delete',
-                dataType: 'JSON',
-                data: {
-                    id: id
-                },
-
-                success: function (result) {
-                    console.log(result);
-                    swal("Successfully deleted!", "You clicked the button!", "success");
-                    $('#' + id).remove();
-                    $('tbody').empty();
-                    retrieveAll();
-                },
-                error: function (err) {
-                    // alert(err)
-                    console.log(err);
-                },
-            });
+        },
+        error: function (e) {
+            console.error(e)
         }
-    }));
+    })
+    $('input').val("");
+}
 
-    // // searching in the search bar
-    $("#btnsearch").on('click', function () {
+// items show in the modal of the borrower template 
 
-        // console.log(id)
-        var x = $('#searchNisya').val();
-        if(x=="" ||x==null){
-            swal("search value is empty!!! please specify the book to be search.")
-        }else{
+$(document).on('click', '#borrowBtn', function (DataId) {
+    // e.preventDefault(e);
+    $("#tableni").hide();
+    $('input').val("");
+    id = $(this).attr("DataId");
+    retrieveOneItemInTheBorrowModal($(this).attr("DataId") + "")
+
+})
+
+
+
+//saving the borrower in the history!
+$(document).on('click', '#returnBtn', function () {
+    id = $(this).attr("DataId");
+    console.log()
+    $.ajax({
+        url: `/borrower/history/${id}`,
+        type: 'post',
+        success: function (result) {
+            alert(result)
+        },
+        error: function (e) {
+            console.error(e)
+        }
+    })
+})
+//returning the books in the library...
+$(document).on('click', '#returnBtn', function () {
+    id = $(this).attr("DataId");
+    $.ajax({
+        url: '/item/return/' + id,
+        type: 'get',
+        success: function (result) {
+            alert(JSON.stringify(result))
+            // var data = result
+            $.ajax({
+                url: '/item/updateReturnBook/' + result.BookID,
+                type: "PUT",
+                data: {
+                    id: result.BookID,
+                    returnborrowQuantity: +result.Quantity,
+                },
+                success: function (result) {
+                    // console.log(id)
+                    // alert(JSON.stringify(result))
+                    // console.log(JSON.stringify(result))
+                    console.log(result)
+                    swal("Successfully return!", "You clicked the button!", "success");
+                    $(`table #${id}`).remove();
+                    // window.location.reload();
+                    $('tbody').empty();
+                    retrieveAllBorrowers();
+                },
+                error: function (e) {
+                    console.error(e)
+                },
+            })
+            $('input').val("");
+            $('input').val("");
+        },
+        error: function (e) {
+            console.error(e)
+        }
+    })
+
+
+})
+
+//ajax for delete 
+
+
+$(document).on('click', "#deleteBtn", (function () {
+    var id = $(this).attr("Dataid");
+    swal({
+        title: "Are you sure you want to delete this BOOK?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+        .then(function (willDelete) {
+            if (willDelete) {
+                deleteItem();
+                swal("The book is remove in the list!", {
+                    icon: "success",
+                });
+            } else {
+                swal("Book is not deleted!");
+            }
+        });
+
+    function deleteItem() {
+
+        $.ajax({
+            url: '/item/delete',
+            type: 'Delete',
+            dataType: 'JSON',
+            data: {
+                id: id
+            },
+
+            success: function (result) {
+                console.log(result);
+                swal("Successfully deleted!", "You clicked the button!", "success");
+                $('#' + id).remove();
+                $('tbody').empty();
+                retrieveAll();
+            },
+            error: function (err) {
+                // alert(err)
+                console.log(err);
+            },
+        });
+    }
+}));
+
+// // searching in the search bar
+$("#btnsearch").on('click', function () {
+
+    // console.log(id)
+    var x = $('#searchNisya').val();
+    if (x == "" || x == null) {
+        swal("search value is empty!!! please specify the book to be search.")
+    } else {
         // console.log(x);
         $.ajax({
             url: '/items/search',
@@ -461,6 +487,6 @@ $(document).ready(function () {
     }
 
 
-    });
-    $('#notavai').hide();
+});
+$('#notavai').hide();
 });

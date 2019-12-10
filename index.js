@@ -235,12 +235,19 @@ app.post('/borrower/history/:id', function (req, res) {
     }, function (err, data) {
         if (err) return console.log(err);
         console.log(data)
+        let set = {
+            UserID : data._id,
+            BookID : data.BookID,
+            Quantity: data.Quantity,
+            book: data.book,
+            Borrower:data.Borrower
+        }
         // save borrower to borrowerHistory database
-        var borrowerLogs = new borrowerHistory(data)
+        var borrowerLogs = new borrowerHistory(set)
         borrowerLogs.save(function (err) {
             if (err) return console.error(err);
         });
-       s;
+       ;
     });
 })
 // app.post('/borrower/history', function (req, res) {
