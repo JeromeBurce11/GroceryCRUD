@@ -29,6 +29,7 @@ $(document).ready(function () {
             // retrieveAll();
             $('#notavai').hide();
             $('#Borrowerstable').hide();
+            $('#Borrowershistory').hide();
             // window.location.reload();
 
         })
@@ -37,6 +38,7 @@ $(document).ready(function () {
     $('#listofborrowerbtn').click(function () {
         // $(".table").dataTable();
         $("#book").hide();
+        $('#Borrowershistory').hide();
         $('#Borrowerstable').show();
         $("#tableni").hide();
         $('#borrowertbody').empty();
@@ -157,23 +159,28 @@ $(document).ready(function () {
             }
         })
     }
-  
+  function historyreview(){
+    $.ajax({
+        url: '/borrowers/history',
+        type: 'get',
+        success: function (result) {
+            // alert(JSON.stringify(result))
+            var history = result
+            data = history
+            for (var i = 0; i < history.length; ++i) {
+                $('#tbodyborrowerhistory').append("<tr id=" + history[i]._id + "><td id=" + history[i].Borrower + 'o' + ">" + history[i].Borrower + "</td><td id=" + history[i]._id + 'b' + ">" + history[i].book + "</td><td id=" + history[i]._id + 'a' + ">" + history[i].Quantity + "</td></tr><br>");
+            }
+        }
+    })
+  }
     // $(document).on('click', '#updateItems', function (e) {
     $('#viewhistory').on('click', function (){
-        alert("yehey!!!")
-        $.ajax({
-            url: 'borrowers/history',
-            type: 'get',
-            success: function (result) {
-                var history = result
-                data = history
-                for (var i = 0; i < history.length; ++i) {
-                    $('#tbodyborrowerhistory').append("<tr id=" + history[i]._id + "><td id=" + history[i].Borrower + 'o' + ">" + history[i].Borrower + "</td><td id=" + history[i]._id + 'b' + ">" + history[i].book + "</td><td id=" + history[i]._id + 'a' + ">" + history[i].Quantity + "</td></tr><br>");
-                }
-            }
-        })
+        $('#tbodyborrowerhistory').empty();
+        historyreview();
         $('#Borrowershistory').show();
-
+        $("#book").hide();
+        $("#tableni").hide();
+        $('#Borrowerstable').hide();
     })
 
     function retrieveAllBorrowers() {
@@ -203,7 +210,7 @@ $(document).ready(function () {
                     var newId = id;
                     borrowQuantity = $('#noofbooks').val()
                     var borrower = $('#Borrower').val()
-                    if (borrowQuantity < 1) {
+                    if (borrowQuantity < 0) {
                         $("#myModalborrow").show();
                         swal("input must be above 0!", {
                             icon: "info",
@@ -213,6 +220,9 @@ $(document).ready(function () {
                             icon: "info",
                         });
                     } else {
+                        swal("Borrowed successfully!", {
+                            icon: "success",
+                        });
                         $.ajax({
                             url: '/item/update1/' + newId,
                             type: "PUT",
@@ -361,7 +371,6 @@ $(document).on('click', '#borrowBtn', function (DataId) {
 //saving the borrower in the history!
 $(document).on('click', '#returnBtn', function () {
     id = $(this).attr("DataId");
-    console.log()
     $.ajax({
         url: `/borrower/history/${id}`,
         type: 'post',
@@ -380,7 +389,7 @@ $(document).on('click', '#returnBtn', function () {
         url: '/item/return/' + id,
         type: 'get',
         success: function (result) {
-            alert(JSON.stringify(result))
+            // alert(JSON.stringify(result))
             // var data = result
             $.ajax({
                 url: '/item/updateReturnBook/' + result.BookID,

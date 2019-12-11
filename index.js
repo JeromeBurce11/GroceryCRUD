@@ -228,12 +228,14 @@ app.put("/item/update/:id", function (req, res) {
             });
         });
 });
-app.get('borrowers/history',function(req,res){
+app.get('/borrowers/history',function(req,res){
+    console.log("been here")
     console.log(req.body)
-    borrowerHistory.find(req.body, function (err, history) {
+    borrowerHistory.find({}, function (err, history) {
         if (err) {
             console.log("err");
         } else {
+            console.log(history)
             res.json(history);
         }
     });
