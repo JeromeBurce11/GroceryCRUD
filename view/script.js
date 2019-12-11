@@ -10,6 +10,7 @@ $(document).ready(function () {
     $("#tableni").hide();
     $("#formUpdate").hide();
     $('#Borrowerstable').hide();
+    $('#Borrowershistory').hide();
 
     $("#createbtn").click(function () {
         $("#book").show();
@@ -20,7 +21,7 @@ $(document).ready(function () {
     function viewbtn() {
 
         $("#viewbtn").click(function () {
-            $(".table").dataTable();
+            // $(".table").dataTable();
             $("#searchNisya").val("");
             $("#book").hide();
             $("#tableni").show();
@@ -156,6 +157,24 @@ $(document).ready(function () {
             }
         })
     }
+  
+    // $(document).on('click', '#updateItems', function (e) {
+    $('#viewhistory').on('click', function (){
+        alert("yehey!!!")
+        $.ajax({
+            url: 'borrowers/history',
+            type: 'get',
+            success: function (result) {
+                var history = result
+                data = history
+                for (var i = 0; i < history.length; ++i) {
+                    $('#tbodyborrowerhistory').append("<tr id=" + history[i]._id + "><td id=" + history[i].Borrower + 'o' + ">" + history[i].Borrower + "</td><td id=" + history[i]._id + 'b' + ">" + history[i].book + "</td><td id=" + history[i]._id + 'a' + ">" + history[i].Quantity + "</td></tr><br>");
+                }
+            }
+        })
+        $('#Borrowershistory').show();
+
+    })
 
     function retrieveAllBorrowers() {
         $.ajax({
@@ -165,16 +184,12 @@ $(document).ready(function () {
                 // console.log(result)
                 var item = result
                 data = item
-
                 for (var i = 0; i < item.length; ++i) {
                     $('#borrowertbody').append("<tr id=" + item[i]._id + "><td id=" + item[i].Borrower + 'o' + ">" + item[i].Borrower + "</td><td id=" + item[i]._id + 'b' + ">" + item[i].book + "</td><td id=" + item[i]._id + 'a' + ">" + item[i].Quantity + "</td><td><button class='btn btn-outline-danger ' DataId=" + item[i]._id + " id='returnBtn'>Return</button></td></tr><br>");
                 }
             }
         })
-
     }
-
-
     function retrieveOneItemInTheBorrowModal(DataId) {
         $.ajax({
             url: '/item/retrieve/' + DataId + '',
@@ -343,9 +358,6 @@ $(document).on('click', '#borrowBtn', function (DataId) {
     retrieveOneItemInTheBorrowModal($(this).attr("DataId") + "")
 
 })
-
-
-
 //saving the borrower in the history!
 $(document).on('click', '#returnBtn', function () {
     id = $(this).attr("DataId");
@@ -485,8 +497,6 @@ $("#btnsearch").on('click', function () {
         });
         $("#searchNisya").val("");
     }
-
-
 });
 $('#notavai').hide();
 });

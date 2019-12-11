@@ -228,6 +228,16 @@ app.put("/item/update/:id", function (req, res) {
             });
         });
 });
+app.get('borrowers/history',function(req,res){
+    console.log(req.body)
+    borrowerHistory.find(req.body, function (err, history) {
+        if (err) {
+            console.log("err");
+        } else {
+            res.json(history);
+        }
+    });
+})
 //saving the borrower in the history!
 app.post('/borrower/history/:id', function (req, res) {
     borrowbooks.findById({
@@ -250,25 +260,6 @@ app.post('/borrower/history/:id', function (req, res) {
        ;
     });
 })
-// app.post('/borrower/history', function (req, res) {
-
-//     console.log(req.body.Borrower + " test")
-//     var item = JSON.stringify(req.body)
-//     // console.log(item + " burce")
-//     var data = {
-//         Borrower: req.body.Borrower,
-//         BookID: req.body.BookID,
-//         Quantity: req.body.Quantity,
-//         book: req.body.book
-//     }
-//     // console.log(JSON.stringify(data) + " tibs")
-//     var borroweLogs = new borrowerHistory(req.body)
-//     borroweLogs.save(function (err, data) {
-//         // console.log(data + " test")
-//         if (err) return console.error(err);
-//         return res.status(200).send(data);
-//     });
-// });
 
 app.get("/item/return/:id", function (req, res) {
     console.log(req.params)
@@ -287,22 +278,7 @@ app.get("/item/return/:id", function (req, res) {
     );
     
 });
-// app.get("/item/return/:id", function (req, res) {
-//     console.log(req.body);
-//     borrowbooks.findOneAndDelete({
-//             _id: req.params.id
-//         },
-//         function (err, data) {
-//             if (err) return console.log(err);
-//             const response = {
-//                 message: "Successfully deleted"
-//             };
-//             return res.status(200).send(response);
-//         }
-//     );
 
-
-// });
 app.put("/item/updateReturnBook/:id", function (req, res) {
     // console.log(req.body.returnborrowQuantity)
     Item.findOneAndUpdate({
